@@ -35,6 +35,8 @@ CARROTS / DAY LABEL UPDATE
 - Internal values still use green/amber/red so existing behaviour logic continues to work.
 
 
-ANIMATED BUNNY FOOTER UPDATE
-- Replaced the Minecraft-style bottom bar with a pink bunny-themed animated footer.
-- Added moving bunny/carrot/flower animation across the bottom bar.
+FIXED PACKAGE
+- Restored carrots wording.
+- Restored child bunny slider.
+- Kept the animated pink bunny footer.
+- Bumped file versions to v=50 to help stop old cached files showing.
