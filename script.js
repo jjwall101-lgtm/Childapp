@@ -27,13 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
     measurementId: "G-F24ZSYYSQV"
   };
 
-  const FAMILY_RECORD_ID = "childapp-af257-shared-family-app";
-  const DATA_KEY = "childappAf257DataV1";
-  const PIN_KEY = "childappAf257ParentPinV1";
-  const THEME_KEY = "childappAf257SelectedTheme";
-  const NOTE_AUTHOR_KEY = "childappAf257ParentNoteAuthorV1";
-  const LAST_NOTIFICATION_KEY = "childappAf257LastNotificationV1";
-  const CHILD_MODE_KEY = "childappAf257ChildModeV1";
+  const FAMILY_RECORD_ID = "clara-shared-family-app";
+  const DATA_KEY = "claraAppDataV1";
+  const PIN_KEY = "claraParentPinV1";
+  const THEME_KEY = "claraSelectedTheme";
+  const NOTE_AUTHOR_KEY = "claraParentNoteAuthorV1";
+  const LAST_NOTIFICATION_KEY = "claraLastNotificationV1";
+  const CHILD_MODE_KEY = "claraChildModeV1";
   const DEFAULT_PIN = "1234";
 
   const DEFAULT_CATEGORIES = [
@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
       celebration: {
         active: false,
         id: "",
-        theme: "mario"
+        theme: "bunny"
       },
       memberUids: {}
     };
@@ -585,12 +585,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getCurrentTheme() {
-    return localStorage.getItem(THEME_KEY) || "mario";
+    return "bunny";
   }
 
   function setTheme(theme) {
-    const allowed = ["mario", "space", "minecraft"];
-    const safeTheme = allowed.includes(theme) ? theme : "mario";
+    const safeTheme = "bunny";
     document.documentElement.dataset.theme = safeTheme;
     localStorage.setItem(THEME_KEY, safeTheme);
 
@@ -695,26 +694,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function getPrizeDetails(theme = getCurrentTheme()) {
-    if (theme === "space") {
-      return {
-        icon: "🪐",
-        name: "SPACE TROPHY",
-        subtitle: "Mission complete!"
-      };
-    }
-
-    if (theme === "minecraft") {
-      return {
-        icon: "💎",
-        name: "DIAMOND PRIZE",
-        subtitle: "Build complete!"
-      };
-    }
-
     return {
-      icon: "🌟",
-      name: "SUPER STAR PRIZE",
-      subtitle: "Goal reached!"
+      icon: "🐰",
+      name: "BUNNY PRIZE",
+      subtitle: "Hop hop hooray!"
     };
   }
 
@@ -737,8 +720,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       showPhoneNotification("Prize reached!", {
-        body: `Cameron reached ${goal} coins.`,
-        tag: "cameron-prize"
+        body: `Clara reached ${goal} coins.`,
+        tag: "clara-prize"
       }).catch(console.error);
     }
   }
@@ -975,8 +958,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     await saveData(data);
 
-    await showPhoneNotification("Cameron shared a feeling", {
-      body: `Cameron feels ${feeling.emoji} ${feeling.label}`,
+    await showPhoneNotification("Clara shared a feeling", {
+      body: `Clara feels ${feeling.emoji} ${feeling.label}`,
       tag: `feeling-${feeling.id}-${getDateISO(now)}`
     });
 
@@ -1422,7 +1405,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="calendar-detail-icon">${safeIcon}</div>
           <div>
             <strong>${dateTitle}</strong>
-            <span>Cameron is with ${safeWho}</span>
+            <span>Clara is with ${safeWho}</span>
             <p class="calendar-selected-description"><b>Description:</b> ${safeNote}</p>
           </div>
         </div>
@@ -1435,7 +1418,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div>
           <strong>${dateTitle}</strong>
           <span>No plan has been added for this day yet.</span>
-          <p class="calendar-selected-description"><b>Description:</b> ${parentUnlocked ? "Use the editor below to add who Cameron is with and what is happening." : "Nothing has been added for Cameron to see yet."}</p>
+          <p class="calendar-selected-description"><b>Description:</b> ${parentUnlocked ? "Use the editor below to add who Clara is with and what is happening." : "Nothing has been added for Clara to see yet."}</p>
         </div>
       </div>
     `;
@@ -1555,7 +1538,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function saveCalendarEntry() {
-    if (!await verifyParentPin("edit Cameron's calendar")) {
+    if (!await verifyParentPin("edit Clara's calendar")) {
       return;
     }
 
@@ -1570,7 +1553,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!who) {
-      alert("Add who Cameron is with first.");
+      alert("Add who Clara is with first.");
       return;
     }
 
@@ -1592,7 +1575,7 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "calendar",
       level: "calendar",
       category: "Calendar",
-      text: `Calendar updated: ${dateISO} - Cameron is with ${who}`,
+      text: `Calendar updated: ${dateISO} - Clara is with ${who}`,
       coinChange: 0,
       coinsAfter: data.coinTotal
     });
@@ -1961,7 +1944,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `cameron-app-export-${getDateISO()}.json`;
+    link.download = `clara-app-export-${getDateISO()}.json`;
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -2101,11 +2084,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateThemeText() {
     updateProgressCharacter();
 
-    const themeColor = getCurrentTheme() === "space"
-      ? "#0e1244"
-      : getCurrentTheme() === "minecraft"
-        ? "#5cae40"
-        : "#4ab7ff";
+    const themeColor = "#f8b9d4";
 
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor);
   }
@@ -2117,7 +2096,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const theme = getCurrentTheme();
 
-    elements.progressCharacter.textContent = theme === "space" ? "🚀" : theme === "minecraft" ? "⛏️" : "🍄";
+    elements.progressCharacter.textContent = "🐰";
   }
 
   function updateCoinDisplay() {
@@ -2162,7 +2141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.bestStreak.textContent = currentData.streak.best;
 
     if (currentData.streak.current > 0) {
-      elements.streakMessage.textContent = `Great work. Cameron has reached green ${currentData.streak.current} day(s) in a row.`;
+      elements.streakMessage.textContent = `Great work. Clara has reached green ${currentData.streak.current} day(s) in a row.`;
     } else {
       elements.streakMessage.textContent = "Reach green today to start a streak.";
     }
@@ -2553,7 +2532,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const coinsLost = Math.abs(recent.reduce((sum, item) => sum + Math.min(0, item.coinChange), 0));
 
     return [
-      "Cameron's weekly report",
+      "Clara's weekly report",
       "",
       `Green logs: ${recent.filter(i => i.level === "green").length}`,
       `Amber logs: ${recent.filter(i => i.level === "amber").length}`,
@@ -2677,7 +2656,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateNotificationStatus();
 
     if (permission === "granted") {
-      await showPhoneNotification("Cameron notifications enabled", {
+      await showPhoneNotification("Clara notifications enabled", {
         body: "You will be notified when coins, rewards, and important logs change.",
         tag: "notifications-enabled"
       });
@@ -2740,8 +2719,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (item.coinChange !== 0) {
       const amount = Math.abs(item.coinChange);
       const title = item.coinChange > 0
-        ? `Cameron gained ${amount} coins`
-        : `Cameron lost ${amount} coins`;
+        ? `Clara gained ${amount} coins`
+        : `Clara lost ${amount} coins`;
 
       await showPhoneNotification(title, {
         body: `${item.text}. Total: ${item.coinsAfter}`,
@@ -2871,7 +2850,7 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.parentPageUnlockButton.addEventListener("click", async () => { await verifyParentPin("unlock parent page"); });
     elements.settingsUnlockButton.addEventListener("click", async () => { await verifyParentPin("unlock settings"); });
 
-    elements.themeSelect.addEventListener("change", event => setTheme(event.target.value));
+    if (elements.themeSelect) elements.themeSelect.addEventListener("change", event => setTheme(event.target.value));
 
     elements.deduct5Button.addEventListener("click", () => adjustCoins(-5));
     elements.deduct10Button.addEventListener("click", () => adjustCoins(-10));

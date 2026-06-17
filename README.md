@@ -1,4 +1,4 @@
-# Cameron sync version
+# Clara sync version
 
 This version keeps the latest rules and adds Firebase syncing.
 
@@ -9,7 +9,7 @@ This version keeps the latest rules and adds Firebase syncing.
 - Pressing green again while already green adds 0 coins
 - Green to amber removes 0 coins
 - Amber is safe
-- Cameron must be amber before he can go green
+- Clara must be amber before he can go green
 - Green can go straight to red
 - Moving onto red removes 50 coins
 - Pressing red again while already red removes 0 coins

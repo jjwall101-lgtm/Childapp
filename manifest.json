@@ -1,10 +1,10 @@
 {
-  "name": "Cameron",
-  "short_name": "Cameron",
+  "name": "Clara",
+  "short_name": "Clara",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#4ab7ff",
-  "theme_color": "#4ab7ff",
+  "background_color": "#fff2f8",
+  "theme_color": "#f8b9d4",
   "icons": [
     {
       "src": "icon-192.png",

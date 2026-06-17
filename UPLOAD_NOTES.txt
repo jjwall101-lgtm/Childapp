@@ -1,15 +1,15 @@
 IMPORTANT
 
-I have updated script.js so it points to the new Firebase project:
+This package is for Clara.
 
-projectId: childapp-af257
+What has been updated:
+- App name is Clara
+- Bunny theme is forced
+- Theme selector is hidden
+- App icon uses the Clara cartoon bunny image
+- Firebase still points to childapp-af257
+- Local storage keys and Firestore family record ID are Clara-specific
 
-I also changed the internal localStorage keys and Firestore family record ID so this copy does not clash with Cameron's app if both are opened from the same GitHub Pages domain.
+Upload these files over the top of the GitHub repo.
 
-Missing from the uploaded files:
-- style.css
-
-Your current GitHub repo already shows style.css, so if you upload this package over the existing repo, do not delete the existing style.css file.
-If you want a complete standalone ZIP, send me style.css as well and I can rebuild the package with it included.
-
-I did not include the old file named "Cameron" because it is a separate old standalone HTML file and not needed for this version.
+Do not delete your existing style.css if it already exists in GitHub.

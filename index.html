@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="mario">
+<html lang="en" data-theme="bunny">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Cameron</title>
+  <title>Clara</title>
 
   <link rel="stylesheet" href="style.css?v=47" />
   <link rel="manifest" href="manifest.json" />
@@ -12,7 +12,104 @@
   <link rel="icon" href="icon.png" />
   <link rel="apple-touch-icon" href="icon.png" />
 
-  <meta name="theme-color" content="#4ab7ff" />
+  <meta name="theme-color" content="#f8b9d4" />
+
+  <style>
+    html[data-theme="bunny"] body {
+      background: linear-gradient(180deg, #fff8fc 0%, #ffeaf5 52%, #fff7ef 100%);
+      color: #5b3c4b;
+    }
+    html[data-theme="bunny"] .theme-switcher {
+      display: none !important;
+    }
+    html[data-theme="bunny"] .hero {
+      position: relative;
+    }
+    html[data-theme="bunny"] .hero::before {
+      content: "🐰";
+      position: absolute;
+      top: -6px;
+      right: 10px;
+      font-size: 2rem;
+      z-index: 3;
+    }
+    html[data-theme="bunny"] .profile-card,
+    html[data-theme="bunny"] .child-dashboard-card,
+    html[data-theme="bunny"] .page > section,
+    html[data-theme="bunny"] .parent-panel,
+    html[data-theme="bunny"] .chart-card {
+      background: rgba(255,255,255,0.95) !important;
+      border: 2px solid #f7c0d8 !important;
+      box-shadow: 0 10px 24px rgba(239, 153, 195, 0.18) !important;
+    }
+    html[data-theme="bunny"] .section-title,
+    html[data-theme="bunny"] .panel-title,
+    html[data-theme="bunny"] h1 {
+      color: #d05c93 !important;
+      text-shadow: none !important;
+    }
+    html[data-theme="bunny"] .app-nav .nav-button.active,
+    html[data-theme="bunny"] button,
+    html[data-theme="bunny"] .small-parent-button,
+    html[data-theme="bunny"] .collect-prize-button,
+    html[data-theme="bunny"] .reset-button {
+      background: linear-gradient(180deg, #f8b9d4 0%, #f39dc2 100%) !important;
+      border-color: #e17aad !important;
+      color: #5d2f45 !important;
+    }
+    html[data-theme="bunny"] .app-nav .nav-button {
+      border-color: #f3bfd6 !important;
+    }
+    html[data-theme="bunny"] .progress-inner {
+      background: linear-gradient(90deg, #f6a5c7 0%, #f8c36f 100%) !important;
+    }
+    html[data-theme="bunny"] .journey-character {
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15));
+    }
+    html[data-theme="bunny"] .power-row {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: repeating-linear-gradient(90deg, rgba(255,255,255,0.55) 0 14px, rgba(255,192,203,0.22) 14px 28px);
+      overflow: hidden;
+    }
+    html[data-theme="bunny"] .power-row > * {
+      display: none !important;
+    }
+    html[data-theme="bunny"] .power-row::before {
+      content: "🐰  🥕  🌸  🐇  🌼";
+      font-size: 1.8rem;
+      letter-spacing: 0.25rem;
+    }
+    html[data-theme="bunny"] .today-level-pill,
+    html[data-theme="bunny"] .mode-status-pill,
+    html[data-theme="bunny"] .sync-pill {
+      border-color: #f2c0d8 !important;
+    }
+    html[data-theme="bunny"] .app-icon-preview {
+      border-radius: 28px;
+      border: 4px solid #ffd77d;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+    html[data-theme="bunny"] input,
+    html[data-theme="bunny"] textarea,
+    html[data-theme="bunny"] select {
+      border-color: #efbfd3 !important;
+      background: #fffdfd !important;
+    }
+    html[data-theme="bunny"] .question-block,
+    html[data-theme="bunny"] .coin-art,
+    html[data-theme="bunny"] .brick-block,
+    html[data-theme="bunny"] .rocket-art,
+    html[data-theme="bunny"] .mushroom-art,
+    html[data-theme="bunny"] .astronaut-helmet,
+    html[data-theme="bunny"] .minecraft-character,
+    html[data-theme="bunny"] .minecraft-block {
+      display: none !important;
+    }
+  </style>
 </head>
 
 <body class="child-mode">
@@ -27,13 +124,13 @@
           <button type="button" class="small-parent-button" id="headerUnlockButton">Parent Mode</button>
         </div>
 
-        <img class="app-icon-preview" src="icon.png" alt="Cameron app logo" />
+        <img class="app-icon-preview" src="icon.png" alt="Clara app logo" />
 
-        <h1>Cameron</h1>
+        <h1>Clara</h1>
 
         <p class="mode-status-pill" id="modeStatusPill">Child Mode</p>
 
-        <section class="hero-child-stats child-mode-only" aria-label="Cameron's coin bank and streak">
+        <section class="hero-child-stats child-mode-only" aria-label="Clara's coin bank and streak">
           <div class="hero-child-stat hero-child-coins">
             <span id="childCoinTotal">0</span>
             <small>coins</small>
@@ -45,12 +142,10 @@
           </div>
         </section>
 
-        <section class="theme-switcher" aria-label="Theme selector">
+        <section class="theme-switcher" aria-label="Theme selector" hidden>
           <label for="themeSelect">Theme</label>
           <select id="themeSelect">
-            <option value="mario">Mario / Retro</option>
-            <option value="space">Spaceman & Rocket</option>
-            <option value="minecraft">Minecraft Blocks</option>
+            <option value="bunny">Bunny Theme</option>
           </select>
         </section>
 
@@ -398,11 +493,11 @@
 
     <section class="page" id="page-calendar">
       <section class="calendar-card family-calendar-card">
-        <div class="section-title">CAMERON'S CALENDAR</div>
-        <p class="calendar-subtitle">Tap a day to see who Cameron is with.</p>
+        <div class="section-title">CLARA'S CALENDAR</div>
+        <p class="calendar-subtitle">Tap a day to see who Clara is with.</p>
 
         <div class="family-today-card" id="familyTodayCard">
-          Tap a day to see Cameron's plan...
+          Tap a day to see Clara's plan...
         </div>
 
         <div class="calendar-grid family-calendar-grid" id="calendarGrid"></div>
@@ -412,13 +507,13 @@
         </div>
 
         <section class="calendar-editor parent-mode-only" id="calendarEditor">
-          <div class="panel-title">Edit Cameron's Calendar</div>
-          <p class="small-copy">Tap a day above, then set who Cameron is with.</p>
+          <div class="panel-title">Edit Clara's Calendar</div>
+          <p class="small-copy">Tap a day above, then set who Clara is with.</p>
 
           <label for="calendarDateInput">Day</label>
           <input type="date" id="calendarDateInput" />
 
-          <label for="calendarWhoInput">Who is Cameron with?</label>
+          <label for="calendarWhoInput">Who is Clara with?</label>
           <input type="text" id="calendarWhoInput" placeholder="Mum / Dad / Nan / School" maxlength="50" />
 
           <label for="calendarIconSelect">Icon</label>
@@ -435,7 +530,7 @@
             <option value="⭐">⭐ Other</option>
           </select>
 
-          <label for="calendarNoteInput">Description for Cameron</label>
+          <label for="calendarNoteInput">Description for Clara</label>
           <textarea id="calendarNoteInput" rows="3" placeholder="Example: Daddy picks up after school."></textarea>
 
           <div class="calendar-editor-buttons">

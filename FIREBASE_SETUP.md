@@ -1,6 +1,6 @@
-# Firebase setup for Cameron sync
+# Firebase setup for Clara sync
 
-This version syncs Cameron's app between phones using Firebase Firestore.
+This version syncs Clara's app between phones using Firebase Firestore.
 
 ## What you need to do
 
