@@ -99,6 +99,14 @@
       border-color: #efbfd3 !important;
       background: #fffdfd !important;
     }
+
+    html[data-theme="bunny"] .child-bunny-slider {
+      width: 100%;
+      margin: 14px 0 4px;
+    }
+    html[data-theme="bunny"] .child-bunny-slider .finish-flag {
+      font-size: 1.25rem;
+    }
     html[data-theme="bunny"] .question-block,
     html[data-theme="bunny"] .coin-art,
     html[data-theme="bunny"] .brick-block,
@@ -130,10 +138,10 @@
 
         <p class="mode-status-pill" id="modeStatusPill">Child Mode</p>
 
-        <section class="hero-child-stats child-mode-only" aria-label="Clara's coin bank and streak">
+        <section class="hero-child-stats child-mode-only" aria-label="Clara's carrot bank and streak">
           <div class="hero-child-stat hero-child-coins">
             <span id="childCoinTotal">0</span>
-            <small>coins</small>
+            <small>carrots</small>
           </div>
 
           <div class="hero-child-stat hero-child-streak">
@@ -141,6 +149,17 @@
             <small>day streak</small>
           </div>
         </section>
+
+        <div class="journey-wrap child-bunny-slider child-mode-only" aria-label="Journey to goal carrots">
+          <div class="journey-track">
+            <span class="journey-start">0</span>
+            <span class="journey-character" id="childProgressCharacter">🐰</span>
+            <span class="finish-line">
+              <span class="finish-flag">🥕</span>
+              <span class="finish-text" id="childFinishGoal">1000</span>
+            </span>
+          </div>
+        </div>
 
         <section class="theme-switcher" aria-label="Theme selector" hidden>
           <label for="themeSelect">Theme</label>
@@ -199,7 +218,7 @@
 
       <div class="child-status-row child-status-row-single">
         <div>
-          <strong id="childTodayLevel">AMBER</strong>
+          <strong id="childTodayLevel">Okay</strong>
           <span>Today</span>
         </div>
       </div>
@@ -207,18 +226,18 @@
 
     <section class="page active" id="page-home">
       <section class="coin-card">
-        <div class="section-title">COIN BANK</div>
+        <div class="section-title">CARROT BANK</div>
 
         <div class="coin-count">
           <span id="coinTotalMain">0</span>
           <small>/ <span id="goalDisplay">1000</span></small>
         </div>
 
-        <div class="progress-outer" aria-label="Coin progress to goal">
+        <div class="progress-outer" aria-label="Carrot progress to goal">
           <div class="progress-inner" id="coinProgress"></div>
         </div>
 
-        <div class="journey-wrap" aria-label="Journey to goal coins">
+        <div class="journey-wrap" aria-label="Journey to goal carrots">
           <div class="journey-track">
             <span class="journey-start">0</span>
             <span class="journey-character" id="progressCharacter">🍄</span>
@@ -259,9 +278,9 @@
       </section>
 
       <section class="behaviour-card">
-        <div class="section-title">TODAY'S LEVEL</div>
+        <div class="section-title">TODAY'S DAY</div>
 
-        <div class="today-level-pill" id="todayLevelPill">AMBER</div>
+        <div class="today-level-pill" id="todayLevelPill">Okay</div>
 
         <label for="behaviourCategorySelect">Reason/category</label>
         <select id="behaviourCategorySelect"></select>
@@ -285,22 +304,22 @@
 
         <div class="level-labels">
           <button type="button" class="level-card red-card" id="redLabel">
-            <strong>RED</strong>
-            <span id="redCoinValue">-50 coins</span>
+            <strong>Bad day</strong>
+            <span id="redCoinValue">-50 carrots</span>
           </button>
 
           <button type="button" class="level-card amber-card" id="amberLabel">
-            <strong>AMBER</strong>
-            <span>Trying level</span>
+            <strong>Okay</strong>
+            <span>Doing okay</span>
           </button>
 
           <button type="button" class="level-card green-card" id="greenLabel">
-            <strong>GREEN</strong>
-            <span id="greenCoinValue">+50 coins</span>
+            <strong>Amazing</strong>
+            <span id="greenCoinValue">+50 carrots</span>
           </button>
         </div>
 
-        <button type="button" class="reset-button" id="resetTodayButton">Reset today to amber</button>
+        <button type="button" class="reset-button" id="resetTodayButton">Reset today to okay</button>
       </section>
 
       <section class="treat-card" id="treatCard">
@@ -310,7 +329,7 @@
           <div class="prize-drop-name" id="prizeDropName">SUPER STAR PRIZE</div>
         </div>
         <p class="treat-subtitle" id="treatSubtitle">Goal reached!</p>
-        <p class="treat-reset-note" id="treatResetNote">Press collect to reset coins back to 0.</p>
+        <p class="treat-reset-note" id="treatResetNote">Press collect to reset carrots back to 0.</p>
         <button type="button" class="collect-prize-button" id="collectPrizeButton">COLLECT PRIZE</button>
       </section>
     </section>
@@ -332,7 +351,7 @@
     <section class="page" id="page-rewards">
       <section class="rewards-shop-card">
         <div class="section-title">REWARDS SHOP</div>
-        <p class="rewards-shop-subtitle">Spend coins on rewards. Claiming a reward removes the cost from the coin bank.</p>
+        <p class="rewards-shop-subtitle">Spend carrots on rewards. Claiming a reward removes the cost from the carrot bank.</p>
         <div class="rewards-list" id="rewardsList"></div>
       </section>
     </section>
@@ -370,11 +389,11 @@
           <section class="parent-panel quick-log-panel">
             <div class="panel-title">Quick Daily Log</div>
 
-            <label for="quickLogLevelSelect">Today’s level</label>
+            <label for="quickLogLevelSelect">Today’s day</label>
             <select id="quickLogLevelSelect">
-              <option value="green">Green</option>
-              <option value="amber">Amber</option>
-              <option value="red">Red</option>
+              <option value="green">Amazing</option>
+              <option value="amber">Okay</option>
+              <option value="red">Bad day</option>
             </select>
 
             <label for="quickLogCategorySelect">Category</label>
@@ -453,7 +472,7 @@
         <label for="historyFilterSelect">Filter history</label>
         <select id="historyFilterSelect">
           <option value="all">All history</option>
-          <option value="coin">Coin changes</option>
+          <option value="coin">Carrot changes</option>
           <option value="level">Levels</option>
           <option value="reward">Rewards</option>
           <option value="feeling">Feelings</option>
@@ -477,7 +496,7 @@
         </div>
 
         <div class="chart-card">
-          <div class="panel-title">Coins this week</div>
+          <div class="panel-title">Carrots this week</div>
           <div class="bar-chart" id="coinChart"></div>
         </div>
 
@@ -552,18 +571,18 @@
 
         <div class="settings-unlocked-content" id="settingsUnlockedContent" hidden>
           <section class="parent-panel">
-            <div class="panel-title">Coin Settings</div>
+            <div class="panel-title">Carrot Settings</div>
 
-            <label for="goalInput">Goal coins</label>
+            <label for="goalInput">Goal carrots</label>
             <input type="number" inputmode="numeric" pattern="[0-9]*" id="goalInput" min="50" max="10000" step="10" />
 
-            <label for="greenCoinsInput">Green coin value</label>
+            <label for="greenCoinsInput">Amazing carrot value</label>
             <input type="number" inputmode="numeric" pattern="[0-9]*" id="greenCoinsInput" min="0" max="1000" step="5" />
 
-            <label for="redCoinsInput">Red coin value</label>
+            <label for="redCoinsInput">Bad day carrot value</label>
             <input type="number" inputmode="numeric" pattern="[0-9]*" id="redCoinsInput" min="0" max="1000" step="5" />
 
-            <button type="button" id="saveCoinSettingsButton">Save Coin Settings</button>
+            <button type="button" id="saveCoinSettingsButton">Save Carrot Settings</button>
           </section>
 
           <section class="parent-panel">

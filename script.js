@@ -101,6 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
     childNextReward: $("childNextReward"),
     childTodayLevel: $("childTodayLevel"),
     childStreakCount: $("childStreakCount"),
+    childProgressCharacter: $("childProgressCharacter"),
+    childFinishGoal: $("childFinishGoal"),
     feelingsGrid: $("feelingsGrid"),
     latestFeelingChild: $("latestFeelingChild"),
     parentDashboardGrid: $("parentDashboardGrid"),
@@ -675,6 +677,17 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.syncStatus.className = `sync-pill ${className}`.trim();
   }
 
+
+  function getLevelLabel(level) {
+    const labels = {
+      green: "Amazing",
+      amber: "Okay",
+      red: "Bad day"
+    };
+
+    return labels[level] || String(level || "");
+  }
+
   function addHistoryEntry(data, entry) {
     const now = new Date();
     data.history = normalizeHistory(data.history);
@@ -714,13 +727,13 @@ document.addEventListener("DOMContentLoaded", () => {
       addHistoryEntry(data, {
         type: "prize",
         level: "prize",
-        text: `Prize reached at ${goal} coins`,
+        text: `Prize reached at ${goal} carrots`,
         coinChange: 0,
         coinsAfter: data.coinTotal
       });
 
       showPhoneNotification("Prize reached!", {
-        body: `Clara reached ${goal} coins.`,
+        body: `Clara reached ${goal} carrots.`,
         tag: "clara-prize"
       }).catch(console.error);
     }
@@ -728,11 +741,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function adjustCoins(amount) {
     if (childMode) {
-      alert("Enter Parent Mode to change coins.");
+      alert("Enter Parent Mode to change carrots.");
       return;
     }
 
-    if (!await verifyParentPin("change coins")) {
+    if (!await verifyParentPin("change carrots")) {
       return;
     }
 
@@ -748,7 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
     addHistoryEntry(data, {
       type: "coin",
       level: actualChange > 0 ? "gain" : "loss",
-      text: actualChange > 0 ? `Manual coin gain: +${actualChange}` : `Manual coin loss: ${actualChange}`,
+      text: actualChange > 0 ? `Manual carrot gain: +${actualChange}` : `Manual carrot loss: ${actualChange}`,
       coinChange: actualChange,
       coinsAfter: data.coinTotal
     });
@@ -786,7 +799,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (level === "green" && previousLevel !== "amber") {
-      alert("Go to amber before green.");
+      alert("Go to Okay before Amazing.");
       return;
     }
 
@@ -797,14 +810,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (level === "green" && previousLevel === "amber") {
       coinChange = data.settings.greenCoins;
-      text = `Moved to GREEN: +${coinChange} coins`;
+      text = `Moved to Amazing: +${coinChange} carrots`;
     } else if (level === "red" && previousLevel !== "red") {
       coinChange = -data.settings.redCoins;
-      text = `Moved to RED: -${data.settings.redCoins} coins`;
+      text = `Moved to Bad day: -${data.settings.redCoins} carrots`;
     } else if (level === "amber") {
-      text = "Moved to AMBER";
+      text = "Moved to Okay";
     } else {
-      text = `Moved to ${level.toUpperCase()}`;
+      text = `Moved to ${getLevelLabel(level)}`;
     }
 
     const before = data.coinTotal;
@@ -871,11 +884,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function resetCoins() {
-    if (!await verifyParentPin("reset coins")) {
+    if (!await verifyParentPin("reset carrots")) {
       return;
     }
 
-    if (!confirm("Reset coins to 0?")) {
+    if (!confirm("Reset carrots to 0?")) {
       return;
     }
 
@@ -891,7 +904,7 @@ document.addEventListener("DOMContentLoaded", () => {
     addHistoryEntry(data, {
       type: "coin",
       level: "reset",
-      text: "Coins reset to 0",
+      text: "Carrots reset to 0",
       coinChange: -before,
       coinsAfter: 0
     });
@@ -916,7 +929,7 @@ document.addEventListener("DOMContentLoaded", () => {
     addHistoryEntry(data, {
       type: "reward",
       level: "prize",
-      text: "Prize collected. Coins reset to 0",
+      text: "Prize collected. Carrots reset to 0",
       coinChange: -before,
       coinsAfter: 0
     });
@@ -1045,7 +1058,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (data.coinTotal < reward.cost) {
-      alert("Not enough coins for this reward yet.");
+      alert("Not enough carrots for this reward yet.");
       return;
     }
 
@@ -1099,11 +1112,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (data.coinTotal < request.rewardCost) {
-      alert("There are not enough coins left to approve this reward.");
+      alert("There are not enough carrots left to approve this reward.");
       return;
     }
 
-    if (!confirm(`Approve "${request.rewardName}" for ${request.rewardCost} coins?`)) {
+    if (!confirm(`Approve "${request.rewardName}" for ${request.rewardCost} carrots?`)) {
       return;
     }
 
@@ -1217,7 +1230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "level",
       level,
       category,
-      text: note ? `Quick daily log: ${level.toUpperCase()} - ${note}` : `Quick daily log: ${level.toUpperCase()}`,
+      text: note ? `Quick daily log: ${getLevelLabel(level)} - ${note}` : `Quick daily log: ${getLevelLabel(level)}`,
       coinChange: actualChange,
       coinsAfter: data.coinTotal
     });
@@ -1253,7 +1266,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const next = rewards.find(reward => reward.cost > total) || rewards.find(reward => total >= reward.cost);
 
     elements.childCoinTotal.textContent = total;
-    elements.childTodayLevel.textContent = currentData.today.level.toUpperCase();
+    elements.childTodayLevel.textContent = getLevelLabel(currentData.today.level);
     elements.childStreakCount.textContent = currentData.streak.current;
 
     const latestFeeling = normalizeFeelingLogs(currentData.feelingLogs)[0];
@@ -1276,7 +1289,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (total >= next.cost) {
       elements.childNextReward.textContent = `${next.icon} ${next.name} is ready!`;
     } else {
-      elements.childNextReward.textContent = `${next.icon} ${next.name}: ${next.cost - total} coins to go`;
+      elements.childNextReward.textContent = `${next.icon} ${next.name}: ${next.cost - total} carrots to go`;
     }
   }
 
@@ -1308,7 +1321,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const info = document.createElement("div");
       info.className = "reward-request-info";
-      info.innerHTML = `<strong>${request.rewardIcon} ${request.rewardName}</strong><span>${request.rewardCost} coins</span>`;
+      info.innerHTML = `<strong>${request.rewardIcon} ${request.rewardName}</strong><span>${request.rewardCost} carrots</span>`;
 
       const actions = document.createElement("div");
       actions.className = "reward-request-actions";
@@ -1364,13 +1377,13 @@ document.addEventListener("DOMContentLoaded", () => {
     grid.innerHTML = "";
 
     [
-      ["Coins", currentData.coinTotal],
-      ["Today", currentData.today.level.toUpperCase()],
+      ["Carrots", currentData.coinTotal],
+      ["Today", getLevelLabel(currentData.today.level)],
       ["Pending rewards", pendingRequests],
       ["Latest feeling", latestFeelingText],
       ["Notes today", notesToday],
-      ["Green logs", greenLogs],
-      ["Red logs", redLogs]
+      ["Amazing logs", greenLogs],
+      ["Bad day logs", redLogs]
     ].forEach(([label, value]) => {
       const card = document.createElement("div");
       card.className = "dashboard-stat";
@@ -1634,11 +1647,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (data.coinTotal < reward.cost) {
-      alert("Not enough coins for this reward yet.");
+      alert("Not enough carrots for this reward yet.");
       return;
     }
 
-    if (!confirm(`Claim "${reward.name}" for ${reward.cost} coins?`)) {
+    if (!confirm(`Claim "${reward.name}" for ${reward.cost} carrots?`)) {
       return;
     }
 
@@ -1655,7 +1668,7 @@ document.addEventListener("DOMContentLoaded", () => {
     await saveData(data);
 
     showPhoneNotification("Reward claimed", {
-      body: `${reward.name} claimed for ${reward.cost} coins.`,
+      body: `${reward.name} claimed for ${reward.cost} carrots.`,
       tag: `reward-${rewardId}`
     }).catch(console.error);
   }
@@ -1928,7 +1941,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!confirm("This clears coins, rewards, notes, history and settings. Are you sure?")) {
+    if (!confirm("This clears carrots, rewards, notes, history and settings. Are you sure?")) {
       return;
     }
 
@@ -2097,6 +2110,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const theme = getCurrentTheme();
 
     elements.progressCharacter.textContent = "🐰";
+
+    if (elements.childProgressCharacter) {
+      elements.childProgressCharacter.textContent = "🐰";
+    }
   }
 
   function updateCoinDisplay() {
@@ -2107,16 +2124,25 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.coinTotalMain.textContent = total;
     elements.goalDisplay.textContent = goal;
     elements.finishGoal.textContent = goal;
+
+    if (elements.childFinishGoal) {
+      elements.childFinishGoal.textContent = goal;
+    }
+
     elements.coinProgress.style.width = `${percent}%`;
     elements.progressCharacter.style.left = `calc(${percent}% - 18px)`;
-    elements.greenCoinValue.textContent = `+${currentData.settings.greenCoins} coins`;
-    elements.redCoinValue.textContent = `-${currentData.settings.redCoins} coins`;
+
+    if (elements.childProgressCharacter) {
+      elements.childProgressCharacter.style.left = `calc(${percent}% - 18px)`;
+    }
+    elements.greenCoinValue.textContent = `+${currentData.settings.greenCoins} carrots`;
+    elements.redCoinValue.textContent = `-${currentData.settings.redCoins} carrots`;
 
     const rewards = normalizeRewards(currentData.rewards).sort((a, b) => a.cost - b.cost);
     const nextReward = rewards.find(reward => reward.cost > total);
 
     if (nextReward) {
-      elements.nextRewardText.textContent = `Next reward: ${nextReward.icon} ${nextReward.name} - ${nextReward.cost - total} coins to go`;
+      elements.nextRewardText.textContent = `Next reward: ${nextReward.icon} ${nextReward.name} - ${nextReward.cost - total} carrots to go`;
     } else if (rewards.length) {
       elements.nextRewardText.textContent = "All rewards are affordable!";
     } else {
@@ -2126,7 +2152,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateLevelDisplay() {
     const level = currentData.today.level;
-    const label = level.toUpperCase();
+    const label = getLevelLabel(level);
 
     elements.todayLevelPill.textContent = label;
     elements.todayLevelPill.style.background = level === "red" ? "var(--red)" : level === "green" ? "var(--green)" : "var(--amber)";
@@ -2143,7 +2169,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentData.streak.current > 0) {
       elements.streakMessage.textContent = `Great work. Clara has reached green ${currentData.streak.current} day(s) in a row.`;
     } else {
-      elements.streakMessage.textContent = "Reach green today to start a streak.";
+      elements.streakMessage.textContent = "Reach Amazing today to start a streak.";
     }
   }
 
@@ -2217,10 +2243,10 @@ document.addEventListener("DOMContentLoaded", () => {
       name.textContent = reward.name;
 
       const cost = document.createElement("span");
-      cost.textContent = `${reward.cost} coins`;
+      cost.textContent = `${reward.cost} carrots`;
 
       const status = document.createElement("small");
-      status.textContent = affordable ? "Ready to claim" : `${reward.cost - total} coins to go`;
+      status.textContent = affordable ? "Ready to claim" : `${reward.cost - total} carrots to go`;
 
       info.appendChild(name);
       info.appendChild(cost);
@@ -2419,7 +2445,7 @@ document.addEventListener("DOMContentLoaded", () => {
       text.textContent = item.text;
 
       const coins = document.createElement("strong");
-      coins.textContent = `${item.coinChange > 0 ? "+" : ""}${item.coinChange} coins | Total: ${item.coinsAfter}`;
+      coins.textContent = `${item.coinChange > 0 ? "+" : ""}${item.coinChange} carrots | Total: ${item.coinsAfter}`;
 
       row.appendChild(meta);
       row.appendChild(text);
@@ -2458,11 +2484,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (elements.reportSummary) {
       elements.reportSummary.innerHTML = "";
       [
-        ["Green days", greenDays],
-        ["Red logs", redItems],
-        ["Amber logs", amberItems],
-        ["Coins gained", coinsGained],
-        ["Coins lost", coinsLost],
+        ["Amazing days", greenDays],
+        ["Bad day logs", redItems],
+        ["Okay logs", amberItems],
+        ["Carrots gained", coinsGained],
+        ["Carrots lost", coinsLost],
         ["Rewards claimed", rewardsClaimed],
         ["Parent notes", notes.length],
         ["Best streak", currentData.streak.best]
@@ -2475,9 +2501,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     drawChart(elements.levelChart, {
-      Green: recent.filter(i => i.level === "green").length,
-      Amber: amberItems,
-      Red: redItems
+      "Amazing": recent.filter(i => i.level === "green").length,
+      "Okay": amberItems,
+      "Bad day": redItems
     });
 
     drawChart(elements.coinChart, {
@@ -2534,11 +2560,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return [
       "Clara's weekly report",
       "",
-      `Green logs: ${recent.filter(i => i.level === "green").length}`,
-      `Amber logs: ${recent.filter(i => i.level === "amber").length}`,
-      `Red logs: ${recent.filter(i => i.level === "red").length}`,
-      `Coins gained: ${coinsGained}`,
-      `Coins lost: ${coinsLost}`,
+      `Amazing logs: ${recent.filter(i => i.level === "green").length}`,
+      `Okay logs: ${recent.filter(i => i.level === "amber").length}`,
+      `Bad day logs: ${recent.filter(i => i.level === "red").length}`,
+      `Carrots gained: ${coinsGained}`,
+      `Carrots lost: ${coinsLost}`,
       `Rewards claimed: ${recent.filter(i => i.type === "reward").length}`,
       `Current streak: ${currentData.streak.current}`,
       `Best streak: ${currentData.streak.best}`,
@@ -2657,7 +2683,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (permission === "granted") {
       await showPhoneNotification("Clara notifications enabled", {
-        body: "You will be notified when coins, rewards, and important logs change.",
+        body: "You will be notified when carrots, rewards, and important logs change.",
         tag: "notifications-enabled"
       });
     }
@@ -2719,8 +2745,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (item.coinChange !== 0) {
       const amount = Math.abs(item.coinChange);
       const title = item.coinChange > 0
-        ? `Clara gained ${amount} coins`
-        : `Clara lost ${amount} coins`;
+        ? `Clara gained ${amount} carrots`
+        : `Clara lost ${amount} carrots`;
 
       await showPhoneNotification(title, {
         body: `${item.text}. Total: ${item.coinsAfter}`,
