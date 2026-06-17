@@ -100,12 +100,66 @@
       background: #fffdfd !important;
     }
 
-    html[data-theme="bunny"] .child-bunny-slider {
-      width: 100%;
-      margin: 14px 0 4px;
+    html[data-theme="bunny"] .ground {
+      position: relative;
+      height: 88px;
+      margin-top: 20px;
+      border-radius: 34px;
+      border: 5px solid #222 !important;
+      background: linear-gradient(180deg, #ffd9eb 0%, #f8b6d4 58%, #f5a7cc 100%) !important;
+      overflow: hidden;
+      box-shadow: 0 10px 0 #222, 0 14px 24px rgba(0,0,0,0.12);
     }
-    html[data-theme="bunny"] .child-bunny-slider .finish-flag {
-      font-size: 1.25rem;
+    html[data-theme="bunny"] .ground .grass,
+    html[data-theme="bunny"] .ground .dirt,
+    html[data-theme="bunny"] .ground .moon-top,
+    html[data-theme="bunny"] .ground .moon-base,
+    html[data-theme="bunny"] .ground .mc-grass,
+    html[data-theme="bunny"] .ground .mc-dirt {
+      display: none !important;
+    }
+    html[data-theme="bunny"] .ground::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 14% 32%, rgba(255,255,255,0.75) 0 10px, transparent 11px),
+        radial-gradient(circle at 28% 66%, rgba(255,255,255,0.38) 0 6px, transparent 7px),
+        radial-gradient(circle at 47% 28%, rgba(255,255,255,0.75) 0 8px, transparent 9px),
+        radial-gradient(circle at 64% 66%, rgba(255,255,255,0.38) 0 6px, transparent 7px),
+        radial-gradient(circle at 81% 30%, rgba(255,255,255,0.75) 0 10px, transparent 11px),
+        linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+      opacity: 0.95;
+      pointer-events: none;
+    }
+    html[data-theme="bunny"] .ground::after {
+      content: "🐰   🌸   🐇   🥕   🐰   🌼   🐇   🥕   🐰";
+      position: absolute;
+      left: -30%;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      white-space: nowrap;
+      letter-spacing: 0.25rem;
+      animation: bunnyParade 12s linear infinite;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.12));
+    }
+    html[data-theme="bunny"] .ground .bunny-ground-strip {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      height: 18px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fff2f8 0%, #ffe0ee 100%);
+      opacity: 0.7;
+    }
+    @keyframes bunnyParade {
+      0% { transform: translate(-5%, -50%); }
+      25% { transform: translate(25%, -58%); }
+      50% { transform: translate(55%, -50%); }
+      75% { transform: translate(85%, -58%); }
+      100% { transform: translate(115%, -50%); }
     }
     html[data-theme="bunny"] .question-block,
     html[data-theme="bunny"] .coin-art,
@@ -138,10 +192,10 @@
 
         <p class="mode-status-pill" id="modeStatusPill">Child Mode</p>
 
-        <section class="hero-child-stats child-mode-only" aria-label="Clara's carrot bank and streak">
+        <section class="hero-child-stats child-mode-only" aria-label="Clara's coin bank and streak">
           <div class="hero-child-stat hero-child-coins">
             <span id="childCoinTotal">0</span>
-            <small>carrots</small>
+            <small>coins</small>
           </div>
 
           <div class="hero-child-stat hero-child-streak">
@@ -149,17 +203,6 @@
             <small>day streak</small>
           </div>
         </section>
-
-        <div class="journey-wrap child-bunny-slider child-mode-only" aria-label="Journey to goal carrots">
-          <div class="journey-track">
-            <span class="journey-start">0</span>
-            <span class="journey-character" id="childProgressCharacter">🐰</span>
-            <span class="finish-line">
-              <span class="finish-flag">🥕</span>
-              <span class="finish-text" id="childFinishGoal">1000</span>
-            </span>
-          </div>
-        </div>
 
         <section class="theme-switcher" aria-label="Theme selector" hidden>
           <label for="themeSelect">Theme</label>
@@ -218,7 +261,7 @@
 
       <div class="child-status-row child-status-row-single">
         <div>
-          <strong id="childTodayLevel">Okay</strong>
+          <strong id="childTodayLevel">AMBER</strong>
           <span>Today</span>
         </div>
       </div>
@@ -226,18 +269,18 @@
 
     <section class="page active" id="page-home">
       <section class="coin-card">
-        <div class="section-title">CARROT BANK</div>
+        <div class="section-title">COIN BANK</div>
 
         <div class="coin-count">
           <span id="coinTotalMain">0</span>
           <small>/ <span id="goalDisplay">1000</span></small>
         </div>
 
-        <div class="progress-outer" aria-label="Carrot progress to goal">
+        <div class="progress-outer" aria-label="Coin progress to goal">
           <div class="progress-inner" id="coinProgress"></div>
         </div>
 
-        <div class="journey-wrap" aria-label="Journey to goal carrots">
+        <div class="journey-wrap" aria-label="Journey to goal coins">
           <div class="journey-track">
             <span class="journey-start">0</span>
             <span class="journey-character" id="progressCharacter">🍄</span>
@@ -278,9 +321,9 @@
       </section>
 
       <section class="behaviour-card">
-        <div class="section-title">TODAY'S DAY</div>
+        <div class="section-title">TODAY'S LEVEL</div>
 
-        <div class="today-level-pill" id="todayLevelPill">Okay</div>
+        <div class="today-level-pill" id="todayLevelPill">AMBER</div>
 
         <label for="behaviourCategorySelect">Reason/category</label>
         <select id="behaviourCategorySelect"></select>
@@ -304,22 +347,22 @@
 
         <div class="level-labels">
           <button type="button" class="level-card red-card" id="redLabel">
-            <strong>Bad day</strong>
-            <span id="redCoinValue">-50 carrots</span>
+            <strong>RED</strong>
+            <span id="redCoinValue">-50 coins</span>
           </button>
 
           <button type="button" class="level-card amber-card" id="amberLabel">
-            <strong>Okay</strong>
-            <span>Doing okay</span>
+            <strong>AMBER</strong>
+            <span>Trying level</span>
           </button>
 
           <button type="button" class="level-card green-card" id="greenLabel">
-            <strong>Amazing</strong>
-            <span id="greenCoinValue">+50 carrots</span>
+            <strong>GREEN</strong>
+            <span id="greenCoinValue">+50 coins</span>
           </button>
         </div>
 
-        <button type="button" class="reset-button" id="resetTodayButton">Reset today to okay</button>
+        <button type="button" class="reset-button" id="resetTodayButton">Reset today to amber</button>
       </section>
 
       <section class="treat-card" id="treatCard">
@@ -329,7 +372,7 @@
           <div class="prize-drop-name" id="prizeDropName">SUPER STAR PRIZE</div>
         </div>
         <p class="treat-subtitle" id="treatSubtitle">Goal reached!</p>
-        <p class="treat-reset-note" id="treatResetNote">Press collect to reset carrots back to 0.</p>
+        <p class="treat-reset-note" id="treatResetNote">Press collect to reset coins back to 0.</p>
         <button type="button" class="collect-prize-button" id="collectPrizeButton">COLLECT PRIZE</button>
       </section>
     </section>
@@ -351,7 +394,7 @@
     <section class="page" id="page-rewards">
       <section class="rewards-shop-card">
         <div class="section-title">REWARDS SHOP</div>
-        <p class="rewards-shop-subtitle">Spend carrots on rewards. Claiming a reward removes the cost from the carrot bank.</p>
+        <p class="rewards-shop-subtitle">Spend coins on rewards. Claiming a reward removes the cost from the coin bank.</p>
         <div class="rewards-list" id="rewardsList"></div>
       </section>
     </section>
@@ -389,11 +432,11 @@
           <section class="parent-panel quick-log-panel">
             <div class="panel-title">Quick Daily Log</div>
 
-            <label for="quickLogLevelSelect">Today’s day</label>
+            <label for="quickLogLevelSelect">Today’s level</label>
             <select id="quickLogLevelSelect">
-              <option value="green">Amazing</option>
-              <option value="amber">Okay</option>
-              <option value="red">Bad day</option>
+              <option value="green">Green</option>
+              <option value="amber">Amber</option>
+              <option value="red">Red</option>
             </select>
 
             <label for="quickLogCategorySelect">Category</label>
@@ -472,7 +515,7 @@
         <label for="historyFilterSelect">Filter history</label>
         <select id="historyFilterSelect">
           <option value="all">All history</option>
-          <option value="coin">Carrot changes</option>
+          <option value="coin">Coin changes</option>
           <option value="level">Levels</option>
           <option value="reward">Rewards</option>
           <option value="feeling">Feelings</option>
@@ -496,7 +539,7 @@
         </div>
 
         <div class="chart-card">
-          <div class="panel-title">Carrots this week</div>
+          <div class="panel-title">Coins this week</div>
           <div class="bar-chart" id="coinChart"></div>
         </div>
 
@@ -571,18 +614,18 @@
 
         <div class="settings-unlocked-content" id="settingsUnlockedContent" hidden>
           <section class="parent-panel">
-            <div class="panel-title">Carrot Settings</div>
+            <div class="panel-title">Coin Settings</div>
 
-            <label for="goalInput">Goal carrots</label>
+            <label for="goalInput">Goal coins</label>
             <input type="number" inputmode="numeric" pattern="[0-9]*" id="goalInput" min="50" max="10000" step="10" />
 
-            <label for="greenCoinsInput">Amazing carrot value</label>
+            <label for="greenCoinsInput">Green coin value</label>
             <input type="number" inputmode="numeric" pattern="[0-9]*" id="greenCoinsInput" min="0" max="1000" step="5" />
 
-            <label for="redCoinsInput">Bad day carrot value</label>
+            <label for="redCoinsInput">Red coin value</label>
             <input type="number" inputmode="numeric" pattern="[0-9]*" id="redCoinsInput" min="0" max="1000" step="5" />
 
-            <button type="button" id="saveCoinSettingsButton">Save Carrot Settings</button>
+            <button type="button" id="saveCoinSettingsButton">Save Coin Settings</button>
           </section>
 
           <section class="parent-panel">
@@ -639,6 +682,7 @@
       <div class="moon-base"></div>
       <div class="mc-grass"></div>
       <div class="mc-dirt"></div>
+      <div class="bunny-ground-strip"></div>
     </footer>
 
 

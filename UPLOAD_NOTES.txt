@@ -33,3 +33,8 @@ CARROTS / DAY LABEL UPDATE
 - Coins are shown as carrots.
 - Green/Amber/Red wording is shown as Amazing/Okay/Bad day.
 - Internal values still use green/amber/red so existing behaviour logic continues to work.
+
+
+ANIMATED BUNNY FOOTER UPDATE
+- Replaced the Minecraft-style bottom bar with a pink bunny-themed animated footer.
+- Added moving bunny/carrot/flower animation across the bottom bar.
