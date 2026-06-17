@@ -18,22 +18,22 @@ import {
 
 document.addEventListener("DOMContentLoaded", () => {
   const firebaseConfig = {
-    apiKey: "AIzaSyD6a8UsUhqSZlRV2gs4FUUIGJJBS8kX3wk",
-    authDomain: "cameronsapp-9d08a.firebaseapp.com",
-    projectId: "cameronsapp-9d08a",
-    storageBucket: "cameronsapp-9d08a.firebasestorage.app",
-    messagingSenderId: "664203865452",
-    appId: "1:664203865452:web:b19f0e1d2ce170503d1749",
-    measurementId: "G-DQ3WVXEN1C"
+    apiKey: "AIzaSyDp3cpmMLQb-luKHlwBlqEFPcgSvZz6I_U",
+    authDomain: "childapp-af257.firebaseapp.com",
+    projectId: "childapp-af257",
+    storageBucket: "childapp-af257.firebasestorage.app",
+    messagingSenderId: "296730501575",
+    appId: "1:296730501575:web:8f97dc9e61491b389fb9e2",
+    measurementId: "G-F24ZSYYSQV"
   };
 
-  const FAMILY_RECORD_ID = "cameron-shared-family-app";
-  const DATA_KEY = "cameronApp2DataV1";
-  const PIN_KEY = "cameronParentPinV1";
-  const THEME_KEY = "cameronSelectedTheme";
-  const NOTE_AUTHOR_KEY = "cameronParentNoteAuthorV1";
-  const LAST_NOTIFICATION_KEY = "cameronLastNotificationV2";
-  const CHILD_MODE_KEY = "cameronChildModeV1";
+  const FAMILY_RECORD_ID = "childapp-af257-shared-family-app";
+  const DATA_KEY = "childappAf257DataV1";
+  const PIN_KEY = "childappAf257ParentPinV1";
+  const THEME_KEY = "childappAf257SelectedTheme";
+  const NOTE_AUTHOR_KEY = "childappAf257ParentNoteAuthorV1";
+  const LAST_NOTIFICATION_KEY = "childappAf257LastNotificationV1";
+  const CHILD_MODE_KEY = "childappAf257ChildModeV1";
   const DEFAULT_PIN = "1234";
 
   const DEFAULT_CATEGORIES = [
