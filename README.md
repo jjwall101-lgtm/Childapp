@@ -111,3 +111,9 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Removed the duplicate carrot/streak boxes and second journey from the top square.
 - Kept the top square layout with Clara icon, Clara name, Child Mode, Carrot Bank, and bunny/carrot icons.
 - Parent Mode still has the full Carrot Bank controls on the Home page.
+
+
+## v18 Remove Today card
+
+- Removed the Today section/card from under the navigation.
+- Added a CSS safety rule so older cached HTML also hides it.

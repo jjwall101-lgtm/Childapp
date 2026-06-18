@@ -4397,3 +4397,10 @@ body.parent-mode .hero-child-stats,
 body.parent-mode .child-bunny-journey {
   display: none !important;
 }
+
+
+/* v18: remove the Today card under the navigation. */
+.child-today-card,
+#childDashboardCard {
+  display: none !important;
+}
