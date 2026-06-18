@@ -1,1 +1,1 @@
-Clara real sync v54 - force same family/sync code across all devices - 2026-06-18
+clara-v55-parent-carrots-20260618

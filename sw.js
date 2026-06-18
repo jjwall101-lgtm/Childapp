@@ -1,18 +1,17 @@
-const CACHE_NAME = "clara-app-v53-real-sync-20260618";
+const CACHE_NAME = "clara-app-v55-parent-carrots-20260618";
 const APP_FILES = [
   "./",
-  "./index.html?v=clara-v53-real-sync",
-  "./style.css?v=clara-v53-real-sync",
-  "./script.js?v=clara-v53-real-sync",
-  "./clara-sync-bridge.js?v=clara-v53-real-sync",
-  "./manifest.json?v=clara-v53-real-sync"
+  "./index.html?v=clara-v55-parent-carrots",
+  "./style.css?v=clara-v55-parent-carrots",
+  "./script.js?v=clara-v55-parent-carrots",
+  "./clara-sync-bridge.js?v=clara-v55-parent-carrots",
+  "./clara-parent-carrot-fix.js?v=clara-v55-parent-carrots",
+  "./manifest.json?v=clara-v55-parent-carrots"
 ];
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_FILES).catch(() => undefined))
-  );
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_FILES).catch(() => undefined)));
 });
 
 self.addEventListener("activate", (event) => {
@@ -30,7 +29,6 @@ self.addEventListener("message", (event) => {
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   const url = new URL(request.url);
-
   if (url.origin !== self.location.origin) return;
 
   if (

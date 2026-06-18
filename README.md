@@ -1,30 +1,41 @@
-# Clara v54 Force Same Family Code Sync Fix
+# Clara v55 Parent Carrot Hotfix
 
-Upload these files to the same GitHub folder as Clara's app:
+This fixes the manual `+5`, `+10`, `+50`, `-5`, `-10`, and `-50` carrot buttons when the app shows `Parent controls locked`.
 
-- `clara-sync-bridge.js`
+## Upload to GitHub
+
+Upload these files into the same folder as Clara's app:
+
+- `clara-parent-carrot-fix.js`
 - `sw.js`
 
-Then edit `index.html` and add the contents of `index-add-this-before-body.txt` just above `</body>`, after the normal `script.js` line.
+Do not delete your existing `index.html`, `style.css`, `script.js`, Firebase files, or `clara-sync-bridge.js`.
 
-## What changed from v53
+## Edit index.html
 
-v53 used `clara-family` only when no old code existed on the phone.
+Add the contents of `index-add-this-before-body.txt` just above `</body>`.
 
-v54 actively overwrites the common localStorage family/sync code keys on every device, so everyone is forced to use the same Firebase document:
+It must be after the normal `script.js` line and after the `clara-sync-bridge.js` line.
 
-`clara-family`
+## Parent PIN
+
+The default PIN in the snippet is:
+
+`1234`
+
+Change this line if you want a different PIN:
+
+```html
+window.CLARA_PARENT_PIN = "1234";
+```
+
+## How it works
+
+- Tapping a carrot +/- button while locked asks for the parent PIN.
+- After the PIN is accepted, parent controls unlock for 30 minutes.
+- The button updates the carrot bank locally.
+- It also calls `claraRealSync.pushNow()` if your v54 sync bridge is installed, so the change is pushed to Firebase.
 
 ## After upload
 
-Everyone should open the app link in Chrome once, refresh it, then reopen the home-screen app. If it still looks stuck, delete and re-add the home-screen shortcut.
-
-## How to change the shared code later
-
-In `index.html`, change:
-
-```html
-window.CLARA_LOCKED_FAMILY_CODE = "clara-family";
-```
-
-to another shared code. Everyone must use the same code.
+Everyone should open the GitHub/Netlify app link in Chrome once and refresh. If the home screen shortcut still shows the old version, delete and re-add the shortcut.

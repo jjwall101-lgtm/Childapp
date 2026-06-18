@@ -1,7 +1,7 @@
-<!-- Add this just above </body>, after your normal script.js line. -->
+<!-- Clara v55 parent carrot manual button fix. Add this just above </body>, after script.js and after clara-sync-bridge.js. -->
 <script>
-  // This forces every device onto the exact same shared Firebase document.
-  window.CLARA_FORCE_SAME_FAMILY_CODE = true;
-  window.CLARA_LOCKED_FAMILY_CODE = "clara-family";
+  window.CLARA_PARENT_PIN = "1234";
+  window.CLARA_PARENT_UNLOCK_MINUTES = 30;
+  window.CLARA_CARROT_TARGET = 1000;
 </script>
-<script src="clara-sync-bridge.js?v=clara-v54-force-family-code-20260618"></script>
+<script src="clara-parent-carrot-fix.js?v=clara-v55-parent-carrots-20260618"></script>
