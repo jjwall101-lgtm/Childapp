@@ -138,3 +138,19 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Removed the Now / Next section from Clara's Home page.
 - Removed the Parent Mode Now / Next editor panel.
 - Added a CSS safety rule so older cached HTML also hides it.
+
+
+## v22 Editable Routine tab
+
+- Added a dedicated Routine tab.
+- Moved Clara's routine out of the Home page into the Routine tab.
+- Added a Parent Mode routine editor directly on the Routine tab.
+- Removed the duplicate routine editor from the Parent page.
+- Child Mode can tick routine steps; Parent Mode can edit the title and steps.
+
+
+## v23 Routine editor back on Parent screen
+
+- Kept the Routine tab for Clara to view and tick routine steps.
+- Moved the routine editor back onto the Parent screen.
+- Removed the routine editor from the Routine tab.

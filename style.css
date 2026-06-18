@@ -4536,3 +4536,50 @@ body.child-mode .hero-calm-tool {
 .parent-now-next-panel {
   display: none !important;
 }
+
+
+/* v22: dedicated editable Routine tab. */
+.routine-main-card,
+.routine-edit-tool {
+  margin-bottom: 14px;
+}
+
+.routine-editor-buttons {
+  margin-top: 12px;
+}
+
+.routine-edit-tool textarea {
+  min-height: 170px;
+}
+
+body.child-mode .routine-edit-tool {
+  display: none !important;
+}
+
+body.parent-mode .routine-edit-tool {
+  display: block !important;
+}
+
+/* Safety: if cached old Home routine HTML exists, do not show duplicate on Home. */
+body[data-active-page="home"] #page-home .routine-tool {
+  display: none !important;
+}
+
+/* But always allow the real Routine tab to show its routine. */
+#page-routine .routine-tool {
+  display: block !important;
+}
+
+
+/* v23: Routine editor belongs on the Parent screen, not inside the Routine tab. */
+#page-routine .routine-edit-tool {
+  display: none !important;
+}
+
+.parent-routine-panel textarea {
+  min-height: 170px;
+}
+
+.routine-editor-buttons {
+  margin-top: 12px;
+}

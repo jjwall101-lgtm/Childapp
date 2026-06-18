@@ -2982,7 +2982,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function switchPage(page) {
-    if (childMode && !["home", "feelings", "rewards", "calendar", "timer", "family"].includes(page)) {
+    if (childMode && !["home", "routine", "feelings", "rewards", "calendar", "timer", "family"].includes(page)) {
       page = "home";
     }
 
@@ -3011,7 +3011,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelectorAll(".nav-button").forEach(button => {
-      const parentOnlyPage = !["home", "feelings", "rewards", "calendar", "timer", "family"].includes(button.dataset.page);
+      const parentOnlyPage = !["home", "routine", "feelings", "rewards", "calendar", "timer", "family"].includes(button.dataset.page);
       button.hidden = childMode && parentOnlyPage;
     });
 
@@ -3102,7 +3102,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (childMode) {
       const activePage = document.querySelector(".page.active");
-      if (activePage && !["page-home", "page-feelings", "page-rewards", "page-calendar", "page-timer", "page-family"].includes(activePage.id)) {
+      if (activePage && !["page-home", "page-routine", "page-feelings", "page-rewards", "page-calendar", "page-timer", "page-family"].includes(activePage.id)) {
         switchPage("home");
       }
     }
@@ -3722,7 +3722,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-21");
+      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-23");
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {
