@@ -49,3 +49,10 @@ If the phone still shows the old version, close the app fully, reopen it, or cle
 ## Calendar title fix
 
 The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara-bunny-v4 so phones should refresh the update.
+
+
+## v5 repair
+
+- Restored the original coin IDs/classes used by the JavaScript and CSS, while keeping all visible wording as carrots.
+- This fixes the broken Carrot Bank layout and missing button styling.
+- Cache version bumped to clara-bunny-v5.

@@ -6,7 +6,7 @@
 
   <title>Clara</title>
 
-  <link rel="stylesheet" href="style.css?v=clara-bunny-4" />
+  <link rel="stylesheet" href="style.css?v=clara-bunny-5" />
   <link rel="manifest" href="manifest.json" />
 
   <link rel="icon" href="icon.png" />
@@ -35,7 +35,7 @@
 
         <section class="hero-child-stats child-mode-only" aria-label="Clara's carrot bank and streak">
           <div class="hero-child-stat hero-child-carrots">
-            <span id="childCarrotTotal">0</span>
+            <span id="childCoinTotal">0</span>
             <small>carrots</small>
           </div>
 
@@ -82,16 +82,16 @@
     </section>
 
     <section class="page active" id="page-home">
-      <section class="carrot-card">
+      <section class="coin-card">
         <div class="section-title">CARROT BANK</div>
 
-        <div class="carrot-count">
-          <span id="carrotTotalMain">0</span>
+        <div class="coin-count">
+          <span id="coinTotalMain">0</span>
           <small>/ <span id="goalDisplay">1000</span></small>
         </div>
 
         <div class="progress-outer" aria-label="Carrot progress to goal">
-          <div class="progress-inner" id="carrotProgress"></div>
+          <div class="progress-inner" id="coinProgress"></div>
         </div>
 
         <div class="journey-wrap" aria-label="Journey to goal carrots">
@@ -107,7 +107,7 @@
 
         <p class="next-reward" id="nextRewardText">Next reward loading...</p>
 
-        <div class="carrot-controls">
+        <div class="coin-controls">
           <button type="button" id="deduct5Button">-5</button>
           <button type="button" id="deduct10Button">-10</button>
           <button type="button" id="deduct50Button">-50</button>
@@ -162,7 +162,7 @@
         <div class="level-labels">
           <button type="button" class="level-card red-card" id="redLabel">
             <strong>RED</strong>
-            <span id="redCarrotValue">-50 carrots</span>
+            <span id="redCoinValue">-50 carrots</span>
           </button>
 
           <button type="button" class="level-card amber-card" id="amberLabel">
@@ -172,7 +172,7 @@
 
           <button type="button" class="level-card green-card" id="greenLabel">
             <strong>GREEN</strong>
-            <span id="greenCarrotValue">+50 carrots</span>
+            <span id="greenCoinValue">+50 carrots</span>
           </button>
         </div>
 
@@ -355,7 +355,7 @@
 
         <div class="chart-card">
           <div class="panel-title">Carrots this week</div>
-          <div class="bar-chart" id="carrotChart"></div>
+          <div class="bar-chart" id="coinChart"></div>
         </div>
 
         <div class="chart-card">
@@ -517,13 +517,13 @@
             <label for="goalInput">Goal carrots</label>
             <input type="number" inputmode="numeric" pattern="[0-9]*" id="goalInput" min="50" max="10000" step="10" />
 
-            <label for="greenCarrotsInput">Green carrot value</label>
-            <input type="number" inputmode="numeric" pattern="[0-9]*" id="greenCarrotsInput" min="0" max="1000" step="5" />
+            <label for="greenCoinsInput">Green carrot value</label>
+            <input type="number" inputmode="numeric" pattern="[0-9]*" id="greenCoinsInput" min="0" max="1000" step="5" />
 
-            <label for="redCarrotsInput">Red carrot value</label>
-            <input type="number" inputmode="numeric" pattern="[0-9]*" id="redCarrotsInput" min="0" max="1000" step="5" />
+            <label for="redCoinsInput">Red carrot value</label>
+            <input type="number" inputmode="numeric" pattern="[0-9]*" id="redCoinsInput" min="0" max="1000" step="5" />
 
-            <button type="button" id="saveCarrotSettingsButton">Save Carrot Settings</button>
+            <button type="button" id="saveCoinSettingsButton">Save Carrot Settings</button>
           </section>
 
           <section class="parent-panel">
@@ -566,7 +566,7 @@
           <section class="parent-panel danger-panel">
             <div class="panel-title">Data Controls</div>
             <button type="button" id="exportDataButton">Export Data</button>
-            <button type="button" id="resetCarrotsButton">Reset Carrots</button>
+            <button type="button" id="resetCoinsButton">Reset Carrots</button>
             <button type="button" id="clearAllDataButton">Clear All App Data</button>
           </section>
         </div>
@@ -615,6 +615,6 @@
     <div class="jay-signature"></div>
   </main>
 
-  <script src="script.js?v=clara-bunny-4" type="module"></script>
+  <script src="script.js?v=clara-bunny-5" type="module"></script>
 </body>
 </html>
