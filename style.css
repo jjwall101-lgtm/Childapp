@@ -4284,3 +4284,16 @@ body.child-mode .who-today-tool {
     font-size: 13px;
   }
 }
+
+
+/* v14: remove duplicate carrot bank/journey from Clara's Child Home top square.
+   The full Carrot Bank now handles the total, progress bar and bunny journey. */
+body.child-mode[data-active-page="home"] .hero-child-stats,
+body.child-mode[data-active-page="home"] .child-bunny-journey {
+  display: none !important;
+}
+
+/* Give the bunny/carrot/flower icons a little breathing room under the single Carrot Bank. */
+body.child-mode[data-active-page="home"] .bunny-power-row {
+  margin-top: 14px;
+}

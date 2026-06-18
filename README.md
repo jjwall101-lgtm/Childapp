@@ -81,3 +81,9 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Hid the separate Carrot Bank card on Child Home to avoid duplication.
 - Removed the "Who am I with today?" home card.
 - Parent Mode keeps the normal Carrot Bank controls.
+
+
+## v14 Single Carrot Bank fix
+
+- Removed the duplicated carrot stat boxes and second bunny journey from Clara's Child Home top square.
+- The Child Home top square now shows one full Carrot Bank only.
