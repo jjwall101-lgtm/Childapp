@@ -4362,3 +4362,38 @@ body.parent-mode .child-bunny-journey,
 body.parent-mode .hero-carrot-bank {
   display: none !important;
 }
+
+
+/* v17: full Carrot Bank in Clara's top square on every child tab, using the clean layout. */
+body.child-mode .hero-carrot-bank,
+body.child-mode.show-top-carrot-bank .hero-carrot-bank {
+  display: block !important;
+}
+
+body.child-mode .hero-child-stats,
+body.child-mode .child-bunny-journey,
+body.child-mode.show-top-carrot-bank .hero-child-stats,
+body.child-mode.show-top-carrot-bank .child-bunny-journey {
+  display: none !important;
+}
+
+body.child-mode .hero-carrot-bank {
+  margin: 18px auto 14px;
+  max-width: 470px;
+}
+
+body.child-mode .bunny-power-row {
+  margin-top: 14px;
+}
+
+/* Hide the separate full Carrot Bank card on Child Home, because it is now in the top square. */
+body.child-mode[data-active-page="home"] #page-home .coin-card {
+  display: none !important;
+}
+
+/* Parent mode still keeps the full Carrot Bank controls inside the Home page only. */
+body.parent-mode .hero-carrot-bank,
+body.parent-mode .hero-child-stats,
+body.parent-mode .child-bunny-journey {
+  display: none !important;
+}

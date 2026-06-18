@@ -103,3 +103,11 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Removed the large top Carrot Bank from every child tab.
 - Kept the carrot/streak boxes and bunny journey visible across child tabs.
 - Kept the full Carrot Bank controls available in Parent Mode.
+
+
+## v17 Top Carrot Bank layout
+
+- Added the full Carrot Bank into Clara's top square on every child tab.
+- Removed the duplicate carrot/streak boxes and second journey from the top square.
+- Kept the top square layout with Clara icon, Clara name, Child Mode, Carrot Bank, and bunny/carrot icons.
+- Parent Mode still has the full Carrot Bank controls on the Home page.
