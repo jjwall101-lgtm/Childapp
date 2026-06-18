@@ -1,13 +1,7 @@
-Add this just above </body> in index.html, AFTER your normal script.js line:
-
-<script src="clara-sync-bridge.js?v=clara-v53-real-sync-20260618"></script>
-
-Also update your existing CSS/script/manifest lines so the phone cannot use the old cached copy:
-
-<link rel="manifest" href="manifest.json?v=clara-v53-real-sync">
-<link rel="stylesheet" href="style.css?v=clara-v53-real-sync">
-<script defer src="script.js?v=clara-v53-real-sync"></script>
-
-If your app registers a service worker, make sure it registers this new one:
-
-navigator.serviceWorker.register("./sw.js?v=clara-v53-real-sync", { updateViaCache: "none" });
+<!-- Add this just above </body>, after your normal script.js line. -->
+<script>
+  // This forces every device onto the exact same shared Firebase document.
+  window.CLARA_FORCE_SAME_FAMILY_CODE = true;
+  window.CLARA_LOCKED_FAMILY_CODE = "clara-family";
+</script>
+<script src="clara-sync-bridge.js?v=clara-v54-force-family-code-20260618"></script>

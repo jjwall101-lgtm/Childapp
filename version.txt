@@ -1,3 +1,1 @@
-Clara App Real Sync Hotfix
-Version: clara-v53-real-sync-20260618
-Created: 2026-06-18
+Clara real sync v54 - force same family/sync code across all devices - 2026-06-18
