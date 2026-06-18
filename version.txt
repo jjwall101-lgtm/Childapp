@@ -1,0 +1,3 @@
+Clara App Real Sync Hotfix
+Version: clara-v53-real-sync-20260618
+Created: 2026-06-18

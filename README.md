@@ -1,24 +1,77 @@
-# Clara sync version
+# Clara App v53 Real Sync Hotfix
 
-This version keeps the latest rules and adds Firebase syncing.
+This package fixes the issue where every device says **sync connected** but nothing actually syncs.
 
-## Rules
+The old green light was likely only proving Firebase loaded. This bridge proves sync properly by doing a real Firestore write/read, then syncing the app's localStorage state across devices that use the same family/sync code.
 
-- Every new day starts on amber
-- Okay to green adds 50 carrots every time
-- Pressing green again while already green adds 0 carrots
-- Amazing to amber removes 0 carrots
-- Okay is safe
-- Clara must be amber before he can go green
-- Amazing can go straight to red
-- Moving onto red removes 50 carrots
-- Pressing red again while already red removes 0 carrots
-- 1000 carrots unlocks the special treat message
-- Changes can sync between phones after Firebase config is added
+## Upload these files to GitHub
 
-## Refresh note
+Upload these into the same folder as Clara's app:
 
-This version uses:
+- `clara-sync-bridge.js`
+- `sw.js`
 
-style.css?v=10
-script.js?v=10
+Do not delete your existing `index.html`, `style.css`, `script.js`, or `manifest.json`.
+
+## Edit index.html
+
+Add this just above `</body>`, after your normal `script.js` line:
+
+```html
+<script src="clara-sync-bridge.js?v=clara-v53-real-sync-20260618"></script>
+```
+
+Also change the file links to add the v53 cache buster:
+
+```html
+<link rel="manifest" href="manifest.json?v=clara-v53-real-sync">
+<link rel="stylesheet" href="style.css?v=clara-v53-real-sync">
+<script defer src="script.js?v=clara-v53-real-sync"></script>
+```
+
+## Important: all devices need the same family/sync code
+
+If one device is using `clara-family` and another is using `family123`, both can show connected but they will not see the same data.
+
+This bridge checks these localStorage keys for a shared code:
+
+- `familyCode`
+- `familyId`
+- `syncCode`
+- `claraFamilyCode`
+- `claraSyncCode`
+- `currentFamilyId`
+- `currentFamilyCode`
+- `activeFamilyId`
+- `activeSyncCode`
+- `parentFamilyCode`
+
+If it cannot find one, it uses:
+
+```text
+clara-family
+```
+
+## Firestore rules for private testing
+
+If the app says `Sync blocked`, your Firestore rules are probably blocking writes or reads.
+
+Use the contents of `firestore-testing-rules.txt` temporarily while testing only.
+
+## What the badge means
+
+- `Testing real sync...` = bridge is checking Firebase properly.
+- `Sync live: family-code` = Firestore write/read worked and the app is listening for updates.
+- `Sync blocked: cannot save to Firebase` = Firestore write is blocked.
+- `Sync blocked: cannot read Firebase` = Firestore listener/read is blocked.
+- `Firebase Firestore SDK was not found` = the Firebase scripts/config are missing or loading after the bridge.
+
+## After uploading
+
+Ask everyone to:
+
+1. Open the app link in Chrome, not the home-screen shortcut.
+2. Refresh once.
+3. Close and reopen Chrome.
+4. Delete and re-add the home-screen shortcut if it still looks old.
+
