@@ -2960,6 +2960,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.body.dataset.activePage = page;
+    updateHeroHomeLayout();
 
     document.querySelectorAll(".nav-button").forEach(button => {
       button.classList.toggle("active", button.dataset.page === page);
@@ -3043,6 +3044,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+
+  function updateHeroHomeLayout() {
+    const activePage = document.querySelector(".page.active");
+    const activeName = activePage ? activePage.id.replace("page-", "") : document.body.dataset.activePage || "home";
+    const showCarrotBank = childMode && activeName === "home";
+
+    document.body.classList.toggle("show-home-carrot-bank", showCarrotBank);
+
+    const heroBank = document.querySelector(".hero-carrot-bank");
+    if (heroBank) {
+      heroBank.hidden = !showCarrotBank;
+      heroBank.style.display = showCarrotBank ? "block" : "none";
+    }
+
+    document.querySelectorAll(".hero-child-stats, .child-bunny-journey").forEach(item => {
+      if (showCarrotBank) {
+        item.style.display = "none";
+      } else {
+        item.style.display = "";
+      }
+    });
+  }
+
   function updateDisplay() {
     const currentActivePage = document.querySelector(".page.active");
     if (currentActivePage) {
@@ -3086,6 +3110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSettingsInputs();
     updateCelebration();
     updateParentLockDisplay();
+    updateHeroHomeLayout();
     updateNotificationStatus();
     maybeSendLatestNotification(currentData).catch(console.error);
   }
@@ -3671,7 +3696,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=51");
+      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-15");
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {

@@ -87,3 +87,11 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 
 - Removed the duplicated carrot stat boxes and second bunny journey from Clara's Child Home top square.
 - The Child Home top square now shows one full Carrot Bank only.
+
+
+## v15 Home-only Carrot Bank fix
+
+- The full top Carrot Bank now appears only on the Child Home page.
+- Other tabs no longer show the full top Carrot Bank.
+- Added a stronger JavaScript and CSS guard so the layout updates correctly when switching tabs.
+- Bumped service worker registration to help phones refresh the update.

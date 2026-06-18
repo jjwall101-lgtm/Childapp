@@ -4297,3 +4297,28 @@ body.child-mode[data-active-page="home"] .child-bunny-journey {
 body.child-mode[data-active-page="home"] .bunny-power-row {
   margin-top: 14px;
 }
+
+
+/* v15: make the top Carrot Bank appear on the Home page only.
+   This overrides older cached/body data rules that made it show on every tab. */
+.hero-carrot-bank {
+  display: none !important;
+}
+
+body.show-home-carrot-bank .hero-carrot-bank {
+  display: block !important;
+}
+
+body.show-home-carrot-bank .hero-child-stats,
+body.show-home-carrot-bank .child-bunny-journey {
+  display: none !important;
+}
+
+body:not(.show-home-carrot-bank) .hero-child-stats,
+body:not(.show-home-carrot-bank) .child-bunny-journey {
+  display: grid;
+}
+
+body:not(.show-home-carrot-bank) .child-bunny-journey {
+  display: block;
+}
