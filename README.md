@@ -22,13 +22,3 @@ This version uses:
 
 style.css?v=10
 script.js?v=10
-
-
-## v57 Bunny timer + cache refresh
-
-This package adds:
-- A Bunny Timer tab.
-- Cache busting on `index.html`, `style.css`, `script.js`, `manifest.json` and `sw.js` using `clara-v57-bunny-timer-cache-20260618`.
-- A service worker that deletes old caches and loads fresh app files when someone opens the app.
-
-Upload all files in this folder to the same GitHub repository. Keep existing icon files if they are already in the repo.

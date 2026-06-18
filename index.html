@@ -3,14 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
 
   <title>Clara</title>
 
-  <link rel="stylesheet" href="style.css?v=clara-v57-bunny-timer-cache-20260618" />
-  <link rel="manifest" href="manifest.json?v=clara-v57-bunny-timer-cache-20260618" />
+  <link rel="stylesheet" href="style.css?v=50" />
+  <link rel="manifest" href="manifest.json" />
 
   <link rel="icon" href="icon.png" />
   <link rel="apple-touch-icon" href="icon.png" />
@@ -272,7 +269,6 @@
       <button type="button" class="nav-button" data-page="history">History</button>
       <button type="button" class="nav-button" data-page="reports">Reports</button>
       <button type="button" class="nav-button" data-page="calendar">Calendar</button>
-      <button type="button" class="nav-button" data-page="timer">Timer</button>
       <button type="button" class="nav-button" data-page="settings">Settings</button>
     </nav>
 
@@ -543,7 +539,6 @@
           <option value="reward">Rewards</option>
           <option value="feeling">Feelings</option>
           <option value="calendar">Calendar</option>
-          <option value="timer">Timer</option>
           <option value="note">Notes</option>
         </select>
 
@@ -576,58 +571,6 @@
       </section>
     </section>
 
-
-
-
-    <section class="page" id="page-timer">
-      <section class="timer-card">
-        <div class="section-title">BUNNY TIMER</div>
-        <p class="timer-subtitle">Use a calm countdown for waiting, bedtime, screen time or getting ready.</p>
-
-        <div class="timer-bunny-scene" aria-hidden="true">
-          <div class="timer-sky-dot timer-dot-one"></div>
-          <div class="timer-sky-dot timer-dot-two"></div>
-          <div class="timer-bunny" id="timerBunny">🐰</div>
-          <div class="timer-carrot-row">🥕 🥕 🥕</div>
-        </div>
-
-        <div class="timer-display" id="timerDisplay" aria-live="polite">05:00</div>
-
-        <div class="timer-progress-outer" aria-label="Timer progress">
-          <div class="timer-progress-inner" id="timerProgress"></div>
-        </div>
-
-        <p class="timer-status" id="timerStatus">Ready for the bunny timer.</p>
-
-        <div class="timer-presets" aria-label="Timer presets">
-          <button type="button" data-timer-preset="60">1 min</button>
-          <button type="button" data-timer-preset="120">2 min</button>
-          <button type="button" data-timer-preset="300">5 min</button>
-          <button type="button" data-timer-preset="600">10 min</button>
-          <button type="button" data-timer-preset="900">15 min</button>
-          <button type="button" data-timer-preset="1800">30 min</button>
-        </div>
-
-        <div class="timer-controls">
-          <button type="button" id="timerStartButton">Start</button>
-          <button type="button" id="timerPauseButton">Pause</button>
-          <button type="button" id="timerResetButton">Reset</button>
-        </div>
-
-        <section class="timer-parent-settings parent-mode-only">
-          <div class="panel-title">Parent Timer Settings</div>
-          <p class="small-copy">Set a custom timer and label. This syncs with the family app.</p>
-
-          <label for="timerMinutesInput">Minutes</label>
-          <input type="number" inputmode="numeric" pattern="[0-9]*" id="timerMinutesInput" min="1" max="120" step="1" />
-
-          <label for="timerLabelInput">Timer label</label>
-          <input type="text" id="timerLabelInput" placeholder="Example: bedtime routine" maxlength="40" />
-
-          <button type="button" id="saveTimerSettingsButton">Save Timer</button>
-        </section>
-      </section>
-    </section>
 
     <section class="page" id="page-calendar">
       <section class="calendar-card family-calendar-card">
@@ -794,6 +737,6 @@
     <div class="jay-signature">Designed and created by Jay</div>
   </main>
 
-  <script src="script.js?v=clara-v57-bunny-timer-cache-20260618" type="module"></script>
+  <script src="script.js?v=50" type="module"></script>
 </body>
 </html>

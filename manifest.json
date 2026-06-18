@@ -1,7 +1,7 @@
 {
   "name": "Clara",
   "short_name": "Clara",
-  "start_url": "./index.html?v=clara-v57-bunny-timer-cache-20260618",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#fff2f8",
   "theme_color": "#f8b9d4",
@@ -16,7 +16,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "scope": "./",
-  "description": "Clara bunny-themed parent and child support app with carrots, calendar, feelings, rewards and timer."
+  ]
 }
