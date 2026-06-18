@@ -1,7 +1,0 @@
-<!-- Clara v55 parent carrot manual button fix. Add this just above </body>, after script.js and after clara-sync-bridge.js. -->
-<script>
-  window.CLARA_PARENT_PIN = "1234";
-  window.CLARA_PARENT_UNLOCK_MINUTES = 30;
-  window.CLARA_CARROT_TARGET = 1000;
-</script>
-<script src="clara-parent-carrot-fix.js?v=clara-v55-parent-carrots-20260618"></script>
