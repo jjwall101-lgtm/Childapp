@@ -63,3 +63,13 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - The full Carrot Bank is now visible on Clara's Child Home screen.
 - Parent-only carrot add/remove buttons remain hidden in Child Mode.
 - Cache version bumped to clara-bunny-v7.
+
+
+## v12 Daily support tools
+
+- Added Now / Next board.
+- Added visual routine builder with tappable steps.
+- Added Calm Corner support buttons.
+- Added Who am I with today? home card using Clara's calendar.
+- Added child reward request status list.
+- Kept Clara pastel bunny theme, carrots, Firebase sync, and child Carrot Bank.

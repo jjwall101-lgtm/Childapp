@@ -6,7 +6,7 @@
 
   <title>Clara</title>
 
-  <link rel="stylesheet" href="style.css?v=clara-pastel-11" />
+  <link rel="stylesheet" href="style.css?v=clara-tools-12" />
   <link rel="manifest" href="manifest.json" />
 
   <link rel="icon" href="icon.png" />
@@ -94,6 +94,39 @@
     </section>
 
     <section class="page active" id="page-home">
+
+      <section class="clara-tool-card who-today-tool child-mode-only">
+        <div class="section-title">WHO AM I WITH?</div>
+        <div class="who-today-display" id="whoTodayCard">Loading today's plan...</div>
+      </section>
+
+      <section class="clara-tool-card now-next-tool">
+        <div class="section-title">NOW / NEXT</div>
+        <div class="now-next-grid">
+          <div class="now-next-box">
+            <span>Now</span>
+            <strong id="nowText">Loading...</strong>
+          </div>
+          <div class="now-next-box">
+            <span>Next</span>
+            <strong id="nextText">Loading...</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="clara-tool-card routine-tool">
+        <div class="section-title">MY ROUTINE</div>
+        <p class="small-copy" id="routineTitleDisplay">Today's routine</p>
+        <div class="child-routine-list" id="childRoutineList"></div>
+      </section>
+
+      <section class="clara-tool-card calm-tool child-mode-only">
+        <div class="section-title">CALM CORNER</div>
+        <p class="small-copy">Tap what might help right now.</p>
+        <div class="calm-choice-list" id="calmChoiceList"></div>
+        <p class="calm-status" id="calmStatus">Choose one when you need help.</p>
+      </section>
+
       <section class="coin-card">
         <div class="section-title">CARROT BANK</div>
 
@@ -222,6 +255,13 @@
         <div class="section-title">REWARDS SHOP</div>
         <p class="rewards-shop-subtitle">Spend carrots on rewards. Claiming a reward removes the cost from the carrot bank.</p>
         <div class="rewards-list" id="rewardsList"></div>
+
+        <section class="reward-status-card">
+          <div class="panel-title">My Reward Requests</div>
+          <div class="reward-request-status-list" id="rewardRequestStatusList">
+            <p class="empty-notes">No reward requests yet.</p>
+          </div>
+        </section>
       </section>
     </section>
 
@@ -241,6 +281,36 @@
             <div class="parent-dashboard-grid" id="parentDashboardGrid"></div>
           </section>
 
+
+          <section class="parent-panel parent-now-next-panel">
+            <div class="panel-title">Now / Next Board</div>
+            <p class="small-copy">Set the simple message Clara sees on her home screen.</p>
+
+            <label for="nowNextNowInput">Now</label>
+            <input type="text" id="nowNextNowInput" placeholder="Example: Get dressed" maxlength="80" />
+
+            <label for="nowNextNextInput">Next</label>
+            <input type="text" id="nowNextNextInput" placeholder="Example: Breakfast" maxlength="80" />
+
+            <button type="button" id="saveNowNextButton">Save Now / Next</button>
+          </section>
+
+          <section class="parent-panel parent-routine-panel">
+            <div class="panel-title">Visual Routine Builder</div>
+            <p class="small-copy">Write one step per line. Emojis are optional.</p>
+
+            <label for="routineTitleInput">Routine name</label>
+            <input type="text" id="routineTitleInput" placeholder="Morning routine" maxlength="60" />
+
+            <label for="routineStepsInput">Routine steps</label>
+            <textarea id="routineStepsInput" rows="6" placeholder="🚽 Toilet&#10;🪥 Brush teeth&#10;👕 Get dressed&#10;🥣 Breakfast"></textarea>
+
+            <div class="calendar-editor-buttons">
+              <button type="button" id="saveRoutineButton">Save Routine</button>
+              <button type="button" id="resetRoutineButton">Reset Ticks</button>
+            </div>
+          </section>
+
           <section class="parent-panel reward-requests-panel">
             <div class="panel-title">Reward Requests</div>
             <div class="reward-request-list" id="rewardRequestList">
@@ -252,6 +322,14 @@
             <div class="panel-title">Recent Feelings</div>
             <div class="parent-feelings-list" id="parentFeelingsList">
               <p class="empty-notes">No feelings logged yet.</p>
+            </div>
+          </section>
+
+
+          <section class="parent-panel calm-parent-panel">
+            <div class="panel-title">Recent Calm Choices</div>
+            <div class="parent-calm-list" id="parentCalmList">
+              <p class="empty-notes">No calm choices yet.</p>
             </div>
           </section>
 
@@ -627,6 +705,6 @@
     <div class="jay-signature"></div>
   </main>
 
-  <script src="script.js?v=clara-pastel-11" type="module"></script>
+  <script src="script.js?v=clara-tools-12" type="module"></script>
 </body>
 </html>

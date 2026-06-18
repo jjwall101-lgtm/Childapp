@@ -82,6 +82,29 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: "overwhelmed", label: "Overwhelmed", emoji: "🥴", colour: "pink" }
   ];
 
+
+  const CALM_CHOICES = [
+    { id: "breathing", icon: "🌬️", label: "Breathing" },
+    { id: "quiet", icon: "🤫", label: "Quiet time" },
+    { id: "cuddle", icon: "🤗", label: "Cuddle" },
+    { id: "drink", icon: "🥤", label: "Drink" },
+    { id: "sensory", icon: "🧸", label: "Sensory break" },
+    { id: "talk", icon: "💬", label: "Talk to me" },
+    { id: "not-sure", icon: "❔", label: "I don't know" }
+  ];
+
+  const DEFAULT_ROUTINE = {
+    title: "Morning routine",
+    steps: [
+      { id: "routine-toilet", icon: "🚽", text: "Toilet" },
+      { id: "routine-teeth", icon: "🪥", text: "Brush teeth" },
+      { id: "routine-dressed", icon: "👗", text: "Get dressed" },
+      { id: "routine-breakfast", icon: "🥣", text: "Breakfast" }
+    ],
+    doneStepIds: [],
+    dateISO: ""
+  };
+
   let app = null;
   let db = null;
   let auth = null;
@@ -116,6 +139,22 @@ document.addEventListener("DOMContentLoaded", () => {
     childNextReward: $("childNextReward"),
     childTodayLevel: $("childTodayLevel"),
     childStreakCount: $("childStreakCount"),
+    whoTodayCard: $("whoTodayCard"),
+    nowText: $("nowText"),
+    nextText: $("nextText"),
+    nowNextNowInput: $("nowNextNowInput"),
+    nowNextNextInput: $("nowNextNextInput"),
+    saveNowNextButton: $("saveNowNextButton"),
+    routineTitleDisplay: $("routineTitleDisplay"),
+    childRoutineList: $("childRoutineList"),
+    routineTitleInput: $("routineTitleInput"),
+    routineStepsInput: $("routineStepsInput"),
+    saveRoutineButton: $("saveRoutineButton"),
+    resetRoutineButton: $("resetRoutineButton"),
+    calmChoiceList: $("calmChoiceList"),
+    calmStatus: $("calmStatus"),
+    parentCalmList: $("parentCalmList"),
+    rewardRequestStatusList: $("rewardRequestStatusList"),
     feelingsGrid: $("feelingsGrid"),
     latestFeelingChild: $("latestFeelingChild"),
     parentDashboardGrid: $("parentDashboardGrid"),
@@ -296,6 +335,16 @@ document.addEventListener("DOMContentLoaded", () => {
       rewardRequests: [],
       feelingLogs: [],
       familyCalendar: [],
+      nowNext: {
+        now: "Check my routine",
+        next: "Choose how I feel",
+        updatedAt: ""
+      },
+      routine: {
+        ...DEFAULT_ROUTINE,
+        dateISO: today
+      },
+      calmLogs: [],
       familyTree: DEFAULT_FAMILY_MEMBERS,
       categories: DEFAULT_CATEGORIES,
       streak: {
@@ -405,6 +454,76 @@ document.addEventListener("DOMContentLoaded", () => {
       .slice(0, 365);
   }
 
+
+  function normalizeNowNext(nowNext = {}) {
+    return {
+      now: String(nowNext.now || "Check my routine").slice(0, 80),
+      next: String(nowNext.next || "Choose how I feel").slice(0, 80),
+      updatedAt: nowNext.updatedAt || ""
+    };
+  }
+
+  function splitIconAndText(line, index) {
+    const clean = String(line || "").trim();
+    if (!clean) {
+      return null;
+    }
+
+    const first = Array.from(clean)[0] || "⭐";
+    const rest = clean.slice(first.length).trim();
+    const looksLikeIcon = /\p{Extended_Pictographic}/u.test(first);
+
+    return {
+      id: `routine-${index}-${clean.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 30) || "step"}`,
+      icon: looksLikeIcon ? first : "⭐",
+      text: looksLikeIcon && rest ? rest : clean
+    };
+  }
+
+  function normalizeRoutine(routine = {}) {
+    const today = getDateISO();
+    const sourceSteps = Array.isArray(routine.steps) && routine.steps.length ? routine.steps : DEFAULT_ROUTINE.steps;
+    const steps = sourceSteps
+      .filter(step => step && typeof step === "object")
+      .map((step, index) => ({
+        id: step.id || `routine-${index}-${Math.random().toString(36).slice(2, 7)}`,
+        icon: String(step.icon || "⭐").slice(0, 8),
+        text: String(step.text || "Step").slice(0, 80)
+      }))
+      .filter(step => step.text.trim())
+      .slice(0, 20);
+
+    const sourceDone = Array.isArray(routine.doneStepIds) && routine.dateISO === today ? routine.doneStepIds : [];
+    const stepIds = new Set(steps.map(step => step.id));
+
+    return {
+      title: String(routine.title || DEFAULT_ROUTINE.title).slice(0, 60),
+      steps: steps.length ? steps : DEFAULT_ROUTINE.steps,
+      doneStepIds: sourceDone.filter(id => stepIds.has(id)).slice(0, 20),
+      dateISO: today
+    };
+  }
+
+  function normalizeCalmLogs(logs) {
+    if (!Array.isArray(logs)) {
+      return [];
+    }
+
+    return logs
+      .filter(log => log && typeof log === "object")
+      .map(log => ({
+        id: log.id || `calm-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        choiceId: String(log.choiceId || "").slice(0, 40),
+        label: String(log.label || "Calm choice").slice(0, 80),
+        icon: String(log.icon || "💗").slice(0, 8),
+        dateISO: log.dateISO || "",
+        dateText: log.dateText || "",
+        savedAt: log.savedAt || ""
+      }))
+      .filter(log => log.choiceId && log.label)
+      .slice(0, 200);
+  }
+
   function normalizeFamilyTree(familyTree) {
     const source = Array.isArray(familyTree) && familyTree.length ? familyTree : DEFAULT_FAMILY_MEMBERS;
 
@@ -497,6 +616,9 @@ document.addEventListener("DOMContentLoaded", () => {
       rewardRequests: normalizeRewardRequests(data?.rewardRequests),
       feelingLogs: normalizeFeelingLogs(data?.feelingLogs),
       familyCalendar: normalizeFamilyCalendar(data?.familyCalendar),
+      nowNext: normalizeNowNext(data?.nowNext),
+      routine: normalizeRoutine(data?.routine),
+      calmLogs: normalizeCalmLogs(data?.calmLogs),
       familyTree: normalizeFamilyTree(data?.familyTree),
       categories: normalizeCategories(data?.categories),
       streak: {
@@ -1658,6 +1780,303 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+
+  function getTodaysCalendarEntry() {
+    const todayISO = getDateISO();
+    return normalizeFamilyCalendar(currentData.familyCalendar).find(entry => entry.dateISO === todayISO) || null;
+  }
+
+  function updateWhoTodayCard() {
+    if (!elements.whoTodayCard) {
+      return;
+    }
+
+    const entry = getTodaysCalendarEntry();
+
+    if (!entry) {
+      elements.whoTodayCard.innerHTML = `
+        <div class="who-today-icon">📅</div>
+        <div>
+          <strong>No plan added for today yet.</strong>
+          <span>Ask a parent to add who Clara is with.</span>
+        </div>
+      `;
+      return;
+    }
+
+    elements.whoTodayCard.innerHTML = `
+      <div class="who-today-icon">${escapeAttr(entry.icon || "⭐")}</div>
+      <div>
+        <strong>Today I am with ${escapeAttr(entry.who)}</strong>
+        <span>${escapeAttr(entry.note || "Tap Calendar to see more.")}</span>
+      </div>
+    `;
+  }
+
+  function updateNowNextTool() {
+    const nowNext = normalizeNowNext(currentData.nowNext);
+
+    if (elements.nowText) {
+      elements.nowText.textContent = nowNext.now || "Check my routine";
+    }
+
+    if (elements.nextText) {
+      elements.nextText.textContent = nowNext.next || "Choose how I feel";
+    }
+
+    if (elements.nowNextNowInput && document.activeElement !== elements.nowNextNowInput) {
+      elements.nowNextNowInput.value = nowNext.now;
+    }
+
+    if (elements.nowNextNextInput && document.activeElement !== elements.nowNextNextInput) {
+      elements.nowNextNextInput.value = nowNext.next;
+    }
+  }
+
+  async function saveNowNext() {
+    if (!await verifyParentPin("edit the Now / Next board")) {
+      return;
+    }
+
+    const data = await getLatestData();
+    data.nowNext = {
+      now: elements.nowNextNowInput?.value.trim() || "Check my routine",
+      next: elements.nowNextNextInput?.value.trim() || "Choose how I feel",
+      updatedAt: new Date().toISOString()
+    };
+
+    addHistoryEntry(data, {
+      type: "tool",
+      level: "now-next",
+      text: `Now / Next updated: ${data.nowNext.now} → ${data.nowNext.next}`,
+      coinChange: 0,
+      coinsAfter: data.coinTotal
+    });
+
+    await saveData(data);
+  }
+
+  function updateRoutineTool() {
+    const routine = normalizeRoutine(currentData.routine);
+
+    if (elements.routineTitleDisplay) {
+      const complete = routine.steps.length && routine.doneStepIds.length === routine.steps.length;
+      elements.routineTitleDisplay.textContent = `${routine.title}${complete ? " - all done 💗" : ""}`;
+    }
+
+    if (elements.childRoutineList) {
+      elements.childRoutineList.innerHTML = "";
+
+      routine.steps.forEach(step => {
+        const done = routine.doneStepIds.includes(step.id);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `routine-step-button${done ? " done" : ""}`;
+        button.dataset.stepId = step.id;
+        button.innerHTML = `
+          <span class="routine-step-icon">${escapeAttr(step.icon)}</span>
+          <span class="routine-step-text">${escapeAttr(step.text)}</span>
+          <span class="routine-step-check">${done ? "✓" : ""}</span>
+        `;
+        button.addEventListener("click", () => toggleRoutineStep(step.id));
+        elements.childRoutineList.appendChild(button);
+      });
+    }
+
+    if (elements.routineTitleInput && document.activeElement !== elements.routineTitleInput) {
+      elements.routineTitleInput.value = routine.title;
+    }
+
+    if (elements.routineStepsInput && document.activeElement !== elements.routineStepsInput) {
+      elements.routineStepsInput.value = routine.steps.map(step => `${step.icon} ${step.text}`).join("\n");
+    }
+  }
+
+  async function toggleRoutineStep(stepId) {
+    const data = await getLatestData();
+    const routine = normalizeRoutine(data.routine);
+    const done = new Set(routine.doneStepIds);
+
+    if (done.has(stepId)) {
+      done.delete(stepId);
+    } else {
+      done.add(stepId);
+    }
+
+    routine.doneStepIds = [...done];
+    routine.dateISO = getDateISO();
+    data.routine = routine;
+
+    await saveData(data);
+  }
+
+  async function saveRoutine() {
+    if (!await verifyParentPin("edit Clara's routine")) {
+      return;
+    }
+
+    const title = elements.routineTitleInput?.value.trim() || "Today's routine";
+    const rawSteps = (elements.routineStepsInput?.value || "").split("\n");
+    const steps = rawSteps
+      .map((line, index) => splitIconAndText(line, index))
+      .filter(Boolean)
+      .slice(0, 20);
+
+    if (!steps.length) {
+      alert("Add at least one routine step.");
+      return;
+    }
+
+    const data = await getLatestData();
+    data.routine = {
+      title,
+      steps,
+      doneStepIds: [],
+      dateISO: getDateISO()
+    };
+
+    addHistoryEntry(data, {
+      type: "tool",
+      level: "routine",
+      text: `Routine updated: ${title}`,
+      coinChange: 0,
+      coinsAfter: data.coinTotal
+    });
+
+    await saveData(data);
+  }
+
+  async function resetRoutineTicks() {
+    if (!await verifyParentPin("reset the routine ticks")) {
+      return;
+    }
+
+    const data = await getLatestData();
+    const routine = normalizeRoutine(data.routine);
+    routine.doneStepIds = [];
+    routine.dateISO = getDateISO();
+    data.routine = routine;
+
+    await saveData(data);
+  }
+
+  function updateCalmTool() {
+    if (!elements.calmChoiceList) {
+      return;
+    }
+
+    elements.calmChoiceList.innerHTML = "";
+
+    CALM_CHOICES.forEach(choice => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "calm-choice-button";
+      button.dataset.calmChoice = choice.id;
+      button.innerHTML = `<span>${choice.icon}</span><strong>${choice.label}</strong>`;
+      button.addEventListener("click", () => logCalmChoice(choice.id));
+      elements.calmChoiceList.appendChild(button);
+    });
+  }
+
+  async function logCalmChoice(choiceId) {
+    const choice = CALM_CHOICES.find(item => item.id === choiceId);
+
+    if (!choice) {
+      return;
+    }
+
+    const data = await getLatestData();
+    data.calmLogs = normalizeCalmLogs(data.calmLogs);
+    const now = new Date();
+
+    data.calmLogs.unshift({
+      id: `calm-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      choiceId: choice.id,
+      label: choice.label,
+      icon: choice.icon,
+      dateISO: getDateISO(now),
+      dateText: formatDateTime(now),
+      savedAt: now.toISOString()
+    });
+
+    data.calmLogs = data.calmLogs.slice(0, 200);
+
+    addHistoryEntry(data, {
+      type: "calm",
+      level: choice.id,
+      text: `Calm tool chosen: ${choice.icon} ${choice.label}`,
+      coinChange: 0,
+      coinsAfter: data.coinTotal
+    });
+
+    if (elements.calmStatus) {
+      elements.calmStatus.textContent = `${choice.icon} ${choice.label} sent to Parent Mode.`;
+    }
+
+    await saveData(data);
+  }
+
+
+  function updateParentCalmChoices() {
+    const list = elements.parentCalmList;
+
+    if (!list) {
+      return;
+    }
+
+    if (!parentUnlocked) {
+      list.innerHTML = "<p class='empty-notes'>Unlock Parent Mode to view calm choices.</p>";
+      return;
+    }
+
+    const logs = normalizeCalmLogs(currentData.calmLogs).slice(0, 8);
+
+    if (!logs.length) {
+      list.innerHTML = "<p class='empty-notes'>No calm choices yet.</p>";
+      return;
+    }
+
+    list.innerHTML = "";
+
+    logs.forEach(log => {
+      const item = document.createElement("article");
+      item.className = "parent-calm-item";
+      item.innerHTML = `
+        <strong>${escapeAttr(log.icon)} ${escapeAttr(log.label)}</strong>
+        <span>${escapeAttr(log.dateText || log.dateISO || "")}</span>
+      `;
+      list.appendChild(item);
+    });
+  }
+
+  function updateRewardRequestStatus() {
+    const list = elements.rewardRequestStatusList;
+
+    if (!list) {
+      return;
+    }
+
+    const requests = normalizeRewardRequests(currentData.rewardRequests).slice(0, 6);
+
+    if (!requests.length) {
+      list.innerHTML = "<p class='empty-notes'>No reward requests yet.</p>";
+      return;
+    }
+
+    list.innerHTML = "";
+
+    requests.forEach(request => {
+      const item = document.createElement("article");
+      item.className = `reward-request-status-item ${request.status}`;
+      item.innerHTML = `
+        <strong>${escapeAttr(request.rewardIcon)} ${escapeAttr(request.rewardName)}</strong>
+        <span>${request.rewardCost} carrots</span>
+        <small>${request.status === "pending" ? "Waiting for parent" : request.status === "approved" ? "Approved 💗" : "Not this time"}</small>
+      `;
+      list.appendChild(item);
+    });
+  }
+
   function updateParentDashboard() {
     const grid = elements.parentDashboardGrid;
 
@@ -2638,6 +3057,12 @@ document.addEventListener("DOMContentLoaded", () => {
     updateLevelDisplay();
     updateStreakDisplay();
     updateChildDashboard();
+    updateWhoTodayCard();
+    updateNowNextTool();
+    updateRoutineTool();
+    updateCalmTool();
+    updateParentCalmChoices();
+    updateRewardRequestStatus();
     updateFeelingsPage();
     updateParentFeelings();
     updateRewardsShop();
@@ -3457,6 +3882,18 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.settingsEnableNotificationsButton.addEventListener("click", enableNotifications);
 
     elements.saveQuickLogButton.addEventListener("click", saveQuickDailyLog);
+
+    if (elements.saveNowNextButton) {
+      elements.saveNowNextButton.addEventListener("click", saveNowNext);
+    }
+
+    if (elements.saveRoutineButton) {
+      elements.saveRoutineButton.addEventListener("click", saveRoutine);
+    }
+
+    if (elements.resetRoutineButton) {
+      elements.resetRoutineButton.addEventListener("click", resetRoutineTicks);
+    }
 
     elements.addParentNoteButton.addEventListener("click", addOrUpdateNote);
     elements.noteAuthor.value = localStorage.getItem(NOTE_AUTHOR_KEY) || "";
