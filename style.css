@@ -4404,3 +4404,93 @@ body.parent-mode .child-bunny-journey {
 #childDashboardCard {
   display: none !important;
 }
+
+
+/* v19: move Calm Corner into Clara's main top square. */
+.hero-calm-tool {
+  display: none;
+}
+
+body.child-mode .hero-calm-tool {
+  display: block !important;
+  margin: 14px auto 8px;
+  max-width: 470px;
+  border: 5px solid var(--outline);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0 rgba(0,0,0,.95);
+  background: linear-gradient(180deg, #fffafc 0%, #f7f1f5 100%);
+  padding: 12px 12px 14px;
+}
+
+.hero-calm-bubble {
+  margin: 12px auto 10px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px;
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.92);
+  border-radius: 22px;
+  background: #fff;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.hero-calm-bunny {
+  width: 56px;
+  height: 56px;
+  border: 4px solid var(--outline);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #fff8fb 0%, #f5edf2 100%);
+  font-size: 30px;
+}
+
+.hero-calm-text strong,
+.hero-calm-text span {
+  display: block;
+}
+
+.hero-calm-text strong {
+  color: #c16f9c;
+  font-size: 20px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.hero-calm-text span {
+  color: #6a5160;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.hero-calm-choice-list {
+  margin-top: 8px;
+}
+
+.hero-calm-status {
+  margin-top: 10px;
+}
+
+/* hide the old page calm card if cached html still contains it */
+#page-home .calm-tool {
+  display: none !important;
+}
+
+@media (max-width: 430px) {
+  .hero-calm-bubble {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .hero-calm-bunny {
+    width: 50px;
+    height: 50px;
+    font-size: 27px;
+  }
+
+  .hero-calm-text strong {
+    font-size: 18px;
+  }
+}

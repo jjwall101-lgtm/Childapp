@@ -117,3 +117,10 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 
 - Removed the Today section/card from under the navigation.
 - Added a CSS safety rule so older cached HTML also hides it.
+
+
+## v19 Calm Corner in top square
+
+- Moved Calm Corner out of the Home page body and into Clara's main top square.
+- Added a bunny help bubble saying "Help! I need to calm down."
+- Kept the calm choice buttons in the top square.

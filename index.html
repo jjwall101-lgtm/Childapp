@@ -6,7 +6,7 @@
 
   <title>Clara</title>
 
-  <link rel="stylesheet" href="style.css?v=clara-tools-18" />
+  <link rel="stylesheet" href="style.css?v=clara-tools-19" />
   <link rel="manifest" href="manifest.json" />
 
   <link rel="icon" href="icon.png" />
@@ -57,6 +57,19 @@
           </div>
 
           <p class="next-reward hero-next-reward" id="heroNextRewardText">Next reward loading...</p>
+        </section>
+
+        <section class="hero-calm-tool child-mode-only" aria-label="Calm Corner">
+          <div class="section-title">CALM CORNER</div>
+          <div class="hero-calm-bubble">
+            <div class="hero-calm-bunny">🐰</div>
+            <div class="hero-calm-text">
+              <strong>Help!</strong>
+              <span>I need to calm down.</span>
+            </div>
+          </div>
+          <div class="calm-choice-list hero-calm-choice-list" id="calmChoiceList"></div>
+          <p class="calm-status hero-calm-status" id="calmStatus">Tap something that might help right now.</p>
         </section>
 
         <section class="hero-child-stats child-mode-only" aria-label="Clara's carrot bank and streak">
@@ -125,15 +138,7 @@
         <p class="small-copy" id="routineTitleDisplay">Today's routine</p>
         <div class="child-routine-list" id="childRoutineList"></div>
       </section>
-
-      <section class="clara-tool-card calm-tool child-mode-only">
-        <div class="section-title">CALM CORNER</div>
-        <p class="small-copy">Tap what might help right now.</p>
-        <div class="calm-choice-list" id="calmChoiceList"></div>
-        <p class="calm-status" id="calmStatus">Choose one when you need help.</p>
-      </section>
-
-      <section class="coin-card">
+<section class="coin-card">
         <div class="section-title">CARROT BANK</div>
 
         <div class="coin-count">
@@ -703,6 +708,6 @@
     <div class="jay-signature"></div>
   </main>
 
-  <script src="script.js?v=clara-tools-18" type="module"></script>
+  <script src="script.js?v=clara-tools-19" type="module"></script>
 </body>
 </html>

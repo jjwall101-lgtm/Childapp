@@ -3692,7 +3692,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-18");
+      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-19");
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {
