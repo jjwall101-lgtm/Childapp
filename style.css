@@ -3406,3 +3406,71 @@ button {
 .power-row > * {
   will-change: auto !important;
 }
+
+
+/* v6: show Clara's bunny journey in Child Mode as well as the full Carrot Bank card. */
+.child-bunny-journey {
+  max-width: 430px;
+  margin: 12px auto 0;
+  padding: 0 4px 2px;
+}
+
+.child-bunny-journey .child-journey-track {
+  height: 72px;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #bdeeff 0 56%, #9ee98d 57% 78%, #9b693f 79% 100%) !important;
+}
+
+.child-bunny-journey .journey-character {
+  top: 10px;
+  font-size: 38px;
+}
+
+.child-bunny-journey .journey-start,
+.child-bunny-journey .finish-line {
+  bottom: 7px;
+  font-size: 14px;
+}
+
+.child-journey-caption {
+  margin: 7px 0 0;
+  font-weight: 900;
+  font-size: 13px;
+  color: #6b214d;
+}
+
+body.parent-mode .child-bunny-journey {
+  display: none !important;
+}
+
+
+/* v7: show the full Carrot Bank on Clara's Child Home screen too.
+   Keep parent-only controls hidden, but show the title, total, progress bar, bunny journey and next reward. */
+body.child-mode[data-active-page="home"] #page-home .coin-card {
+  display: block !important;
+}
+
+body.child-mode[data-active-page="home"] #page-home .coin-card .section-title,
+body.child-mode[data-active-page="home"] #page-home .coin-count,
+body.child-mode[data-active-page="home"] #page-home .progress-outer,
+body.child-mode[data-active-page="home"] #page-home .journey-wrap,
+body.child-mode[data-active-page="home"] #page-home .next-reward {
+  display: block !important;
+}
+
+body.child-mode[data-active-page="home"] #page-home .coin-card .journey-track {
+  display: block !important;
+}
+
+body.child-mode[data-active-page="home"] #page-home .coin-card .journey-start,
+body.child-mode[data-active-page="home"] #page-home .coin-card .journey-character,
+body.child-mode[data-active-page="home"] #page-home .coin-card .finish-line {
+  display: inline-block !important;
+}
+
+body.child-mode #page-home .coin-card .coin-controls,
+body.child-mode #page-home .coin-card .notification-controls,
+body.child-mode #page-home .coin-card .parent-hint {
+  display: none !important;
+}

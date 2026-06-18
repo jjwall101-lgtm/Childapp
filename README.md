@@ -56,3 +56,10 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Restored the original coin IDs/classes used by the JavaScript and CSS, while keeping all visible wording as carrots.
 - This fixes the broken Carrot Bank layout and missing button styling.
 - Cache version bumped to clara-bunny-v5.
+
+
+## v7 child Carrot Bank update
+
+- The full Carrot Bank is now visible on Clara's Child Home screen.
+- Parent-only carrot add/remove buttons remain hidden in Child Mode.
+- Cache version bumped to clara-bunny-v7.

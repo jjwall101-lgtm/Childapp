@@ -165,6 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
     finishGoal: $("finishGoal"),
     coinProgress: $("coinProgress"),
     progressCharacter: $("progressCharacter"),
+    childProgressCharacter: $("childProgressCharacter"),
+    childFinishGoal: $("childFinishGoal"),
     nextRewardText: $("nextRewardText"),
 
     deduct5Button: $("deduct5Button"),
@@ -2659,10 +2661,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateProgressCharacter() {
-    if (!elements.progressCharacter) {
-      return;
+    if (elements.progressCharacter) {
+      elements.progressCharacter.textContent = "🐰";
     }
-    elements.progressCharacter.textContent = "🐰";
+
+    if (elements.childProgressCharacter) {
+      elements.childProgressCharacter.textContent = "🐰";
+    }
   }
 
   function updateCoinDisplay() {
@@ -2675,6 +2680,15 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.finishGoal.textContent = goal;
     elements.coinProgress.style.width = `${percent}%`;
     elements.progressCharacter.style.left = `calc(${percent}% - 18px)`;
+
+    if (elements.childFinishGoal) {
+      elements.childFinishGoal.textContent = goal;
+    }
+
+    if (elements.childProgressCharacter) {
+      elements.childProgressCharacter.style.left = `calc(${percent}% - 18px)`;
+    }
+
     elements.greenCoinValue.textContent = `+${currentData.settings.greenCoins} carrots`;
     elements.redCoinValue.textContent = `-${currentData.settings.redCoins} carrots`;
 
