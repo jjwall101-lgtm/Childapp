@@ -149,8 +149,8 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Child Mode can tick routine steps; Parent Mode can edit the title and steps.
 
 
-## v23 Routine editor back on Parent screen
+## v24 Tabs at top
 
-- Kept the Routine tab for Clara to view and tick routine steps.
-- Moved the routine editor back onto the Parent screen.
-- Removed the routine editor from the Routine tab.
+- Moved the page tabs to the very top of the app above Clara's main header.
+- Removed the top app padding so the tabs sit right at the top of the screen.
+- Kept Clara's main top square directly underneath the tabs.

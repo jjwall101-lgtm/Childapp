@@ -6,7 +6,7 @@
 
   <title>Clara</title>
 
-  <link rel="stylesheet" href="style.css?v=clara-tools-23" />
+  <link rel="stylesheet" href="style.css?v=clara-tools-24" />
   <link rel="manifest" href="manifest.json" />
 
   <link rel="icon" href="icon.png" />
@@ -17,6 +17,21 @@
 
 <body class="child-mode">
   <main class="app">
+
+    <nav class="app-nav" aria-label="App pages">
+      <button type="button" class="nav-button active" data-page="home">Home</button>
+      <button type="button" class="nav-button" data-page="routine">Routine</button>
+      <button type="button" class="nav-button" data-page="feelings">Feelings</button>
+      <button type="button" class="nav-button" data-page="rewards">Rewards</button>
+      <button type="button" class="nav-button" data-page="parent">Parent</button>
+      <button type="button" class="nav-button" data-page="history">History</button>
+      <button type="button" class="nav-button" data-page="reports">Reports</button>
+      <button type="button" class="nav-button" data-page="calendar">Calendar</button>
+      <button type="button" class="nav-button" data-page="timer">Timer</button>
+      <button type="button" class="nav-button" data-page="family">Family</button>
+      <button type="button" class="nav-button" data-page="settings">Settings</button>
+    </nav>
+
     <header class="hero">
       <div class="hero-bg hero-bg-one"></div>
       <div class="hero-bg hero-bg-two"></div>
@@ -106,19 +121,6 @@
       </section>
     </header>
 
-    <nav class="app-nav" aria-label="App pages">
-      <button type="button" class="nav-button active" data-page="home">Home</button>
-      <button type="button" class="nav-button" data-page="routine">Routine</button>
-      <button type="button" class="nav-button" data-page="feelings">Feelings</button>
-      <button type="button" class="nav-button" data-page="rewards">Rewards</button>
-      <button type="button" class="nav-button" data-page="parent">Parent</button>
-      <button type="button" class="nav-button" data-page="history">History</button>
-      <button type="button" class="nav-button" data-page="reports">Reports</button>
-      <button type="button" class="nav-button" data-page="calendar">Calendar</button>
-      <button type="button" class="nav-button" data-page="timer">Timer</button>
-      <button type="button" class="nav-button" data-page="family">Family</button>
-      <button type="button" class="nav-button" data-page="settings">Settings</button>
-    </nav>
     <section class="page active" id="page-home">
 <section class="coin-card">
         <div class="section-title">CARROT BANK</div>
@@ -236,7 +238,23 @@
         <p class="small-copy" id="routineTitleDisplay">Today's routine</p>
         <div class="child-routine-list" id="childRoutineList"></div>
       </section>
-</section>
+
+      <section class="clara-tool-card routine-edit-tool parent-mode-only">
+        <div class="panel-title">Edit Routine</div>
+        <p class="small-copy">Change Clara's routine here. Put one step on each line. Emojis are optional.</p>
+
+        <label for="routineTitleInput">Routine name</label>
+        <input type="text" id="routineTitleInput" placeholder="Morning routine" maxlength="60" />
+
+        <label for="routineStepsInput">Routine steps</label>
+        <textarea id="routineStepsInput" rows="7" placeholder="🚽 Toilet&#10;🪥 Brush teeth&#10;👗 Get dressed&#10;🥣 Breakfast"></textarea>
+
+        <div class="calendar-editor-buttons routine-editor-buttons">
+          <button type="button" id="saveRoutineButton">Save Routine</button>
+          <button type="button" id="resetRoutineButton">Reset Ticks</button>
+        </div>
+      </section>
+    </section>
 
 
     <section class="page" id="page-feelings">
@@ -282,23 +300,6 @@
             <div class="panel-title">Parent Dashboard</div>
             <div class="parent-dashboard-grid" id="parentDashboardGrid"></div>
           </section>
-          <section class="parent-panel parent-routine-panel">
-            <div class="panel-title">Edit Clara's Routine</div>
-            <p class="small-copy">Change Clara's routine here. Put one step on each line. Emojis are optional.</p>
-
-            <label for="routineTitleInput">Routine name</label>
-            <input type="text" id="routineTitleInput" placeholder="Morning routine" maxlength="60" />
-
-            <label for="routineStepsInput">Routine steps</label>
-            <textarea id="routineStepsInput" rows="7" placeholder="🚽 Toilet&#10;🪥 Brush teeth&#10;👗 Get dressed&#10;🥣 Breakfast"></textarea>
-
-            <div class="calendar-editor-buttons routine-editor-buttons">
-              <button type="button" id="saveRoutineButton">Save Routine</button>
-              <button type="button" id="resetRoutineButton">Reset Ticks</button>
-            </div>
-          </section>
-
-
 <section class="parent-panel reward-requests-panel">
             <div class="panel-title">Reward Requests</div>
             <div class="reward-request-list" id="rewardRequestList">
@@ -685,6 +686,6 @@
     <div class="jay-signature"></div>
   </main>
 
-  <script src="script.js?v=clara-tools-23" type="module"></script>
+  <script src="script.js?v=clara-tools-24" type="module"></script>
 </body>
 </html>

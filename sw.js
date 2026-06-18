@@ -1,9 +1,9 @@
-const CACHE_NAME = "clara-tools-v23";
+const CACHE_NAME = "clara-tools-v24";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./style.css?v=clara-tools-23",
-  "./script.js?v=clara-tools-23",
+  "./style.css?v=clara-tools-24",
+  "./script.js?v=clara-tools-24",
   "./manifest.json",
   "./icon.png",
   "./icon-192.png"

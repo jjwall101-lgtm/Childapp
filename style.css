@@ -4583,3 +4583,25 @@ body[data-active-page="home"] #page-home .routine-tool {
 .routine-editor-buttons {
   margin-top: 12px;
 }
+
+
+/* v24: page tabs pinned right at the top of the screen above Clara's header. */
+.app {
+  padding-top: 0 !important;
+}
+
+.app-nav {
+  margin-top: 0 !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.hero {
+  margin-top: 12px;
+}
+
+@media (max-width: 480px) {
+  .hero {
+    margin-top: 10px;
+  }
+}
