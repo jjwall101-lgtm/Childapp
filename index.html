@@ -6,7 +6,7 @@
 
   <title>Clara</title>
 
-  <link rel="stylesheet" href="style.css?v=clara-tools-20" />
+  <link rel="stylesheet" href="style.css?v=clara-tools-21" />
   <link rel="manifest" href="manifest.json" />
 
   <link rel="icon" href="icon.png" />
@@ -119,22 +119,7 @@
       <button type="button" class="nav-button" data-page="settings">Settings</button>
     </nav>
     <section class="page active" id="page-home">
-
-      <section class="clara-tool-card now-next-tool">
-        <div class="section-title">NOW / NEXT</div>
-        <div class="now-next-grid">
-          <div class="now-next-box">
-            <span>Now</span>
-            <strong id="nowText">Loading...</strong>
-          </div>
-          <div class="now-next-box">
-            <span>Next</span>
-            <strong id="nextText">Loading...</strong>
-          </div>
-        </div>
-      </section>
-
-      <section class="clara-tool-card routine-tool">
+<section class="clara-tool-card routine-tool">
         <div class="section-title">MY ROUTINE</div>
         <p class="small-copy" id="routineTitleDisplay">Today's routine</p>
         <div class="child-routine-list" id="childRoutineList"></div>
@@ -292,22 +277,7 @@
             <div class="panel-title">Parent Dashboard</div>
             <div class="parent-dashboard-grid" id="parentDashboardGrid"></div>
           </section>
-
-
-          <section class="parent-panel parent-now-next-panel">
-            <div class="panel-title">Now / Next Board</div>
-            <p class="small-copy">Set the simple message Clara sees on her home screen.</p>
-
-            <label for="nowNextNowInput">Now</label>
-            <input type="text" id="nowNextNowInput" placeholder="Example: Get dressed" maxlength="80" />
-
-            <label for="nowNextNextInput">Next</label>
-            <input type="text" id="nowNextNextInput" placeholder="Example: Breakfast" maxlength="80" />
-
-            <button type="button" id="saveNowNextButton">Save Now / Next</button>
-          </section>
-
-          <section class="parent-panel parent-routine-panel">
+<section class="parent-panel parent-routine-panel">
             <div class="panel-title">Visual Routine Builder</div>
             <p class="small-copy">Write one step per line. Emojis are optional.</p>
 
@@ -709,6 +679,6 @@
     <div class="jay-signature"></div>
   </main>
 
-  <script src="script.js?v=clara-tools-20" type="module"></script>
+  <script src="script.js?v=clara-tools-21" type="module"></script>
 </body>
 </html>

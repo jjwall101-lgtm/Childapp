@@ -131,3 +131,10 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Calm Corner options are now hidden by default.
 - Tapping the bunny help bubble opens the calm options.
 - After Clara chooses an option, the choices collapse again.
+
+
+## v21 Remove Now / Next
+
+- Removed the Now / Next section from Clara's Home page.
+- Removed the Parent Mode Now / Next editor panel.
+- Added a CSS safety rule so older cached HTML also hides it.

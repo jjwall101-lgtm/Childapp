@@ -3115,7 +3115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateLevelDisplay();
     updateStreakDisplay();
     updateChildDashboard();
-    updateNowNextTool();
     updateRoutineTool();
     updateCalmTool();
     updateParentCalmChoices();
@@ -3723,7 +3722,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-20");
+      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-21");
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {
@@ -3989,10 +3988,6 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.settingsEnableNotificationsButton.addEventListener("click", enableNotifications);
 
     elements.saveQuickLogButton.addEventListener("click", saveQuickDailyLog);
-
-    if (elements.saveNowNextButton) {
-      elements.saveNowNextButton.addEventListener("click", saveNowNext);
-    }
 
     if (elements.saveRoutineButton) {
       elements.saveRoutineButton.addEventListener("click", saveRoutine);

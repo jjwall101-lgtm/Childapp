@@ -4529,3 +4529,10 @@ body.child-mode .hero-calm-tool {
 .hero-calm-tool.open .hero-calm-status {
   display: block !important;
 }
+
+
+/* v21: remove Now / Next section and editor. */
+.now-next-tool,
+.parent-now-next-panel {
+  display: none !important;
+}
