@@ -3740,3 +3740,222 @@ html[data-theme="bunny"] .jay-signature {
   html[data-theme="bunny"] .app-nav { padding: 10px; gap: 8px; }
   html[data-theme="bunny"] .nav-button { font-size: 12px; padding: 11px 5px; }
 }
+
+
+/* v9: restyle the bottom ground bar to match Clara pastel theme. */
+html[data-theme="bunny"] .ground {
+  height: 50px;
+  margin-top: 16px;
+  border: 5px solid var(--outline);
+  border-radius: 26px;
+  box-shadow: 8px 8px 0 rgba(0,0,0,.95);
+  background: #f7f1f5;
+  overflow: hidden;
+}
+
+html[data-theme="bunny"] .ground .grass {
+  display: block !important;
+  height: 20px;
+  background: linear-gradient(180deg, #f8cfe2 0%, #e7a4c7 100%);
+  border-bottom: 4px solid rgba(0,0,0,.08);
+}
+
+html[data-theme="bunny"] .ground .dirt {
+  display: block !important;
+  height: 30px;
+  background: repeating-linear-gradient(90deg, #f7e2ed 0 22px, #e9bdd4 22px 44px);
+}
+
+html[data-theme="bunny"] .ground .moon-top,
+html[data-theme="bunny"] .ground .moon-base,
+html[data-theme="bunny"] .ground .mc-grass,
+html[data-theme="bunny"] .ground .mc-dirt {
+  display: none !important;
+}
+
+
+/* v10: full pastel polish across all app pages. */
+html[data-theme="bunny"] .feelings-card,
+html[data-theme="bunny"] .rewards-shop-card,
+html[data-theme="bunny"] .parent-page-card,
+html[data-theme="bunny"] .history-card,
+html[data-theme="bunny"] .reports-card,
+html[data-theme="bunny"] .settings-card,
+html[data-theme="bunny"] .calendar-card,
+html[data-theme="bunny"] .family-tree-card,
+html[data-theme="bunny"] .timer-card,
+html[data-theme="bunny"] .parent-panel,
+html[data-theme="bunny"] .chart-card {
+  background: linear-gradient(180deg, #fbf8fa 0%, #f5f0f4 100%);
+}
+
+html[data-theme="bunny"] label,
+html[data-theme="bunny"] .feelings-subtitle,
+html[data-theme="bunny"] .rewards-shop-subtitle,
+html[data-theme="bunny"] .small-copy,
+html[data-theme="bunny"] .empty-notes,
+html[data-theme="bunny"] .next-reward,
+html[data-theme="bunny"] .streak-message,
+html[data-theme="bunny"] .child-next-reward {
+  color: #734c62;
+}
+
+html[data-theme="bunny"] input,
+html[data-theme="bunny"] select,
+html[data-theme="bunny"] textarea {
+  background: #fffdfd;
+  border: 4px solid var(--outline);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.92);
+  color: #5d4453;
+}
+
+html[data-theme="bunny"] textarea::placeholder,
+html[data-theme="bunny"] input::placeholder {
+  color: #b38a9f;
+}
+
+html[data-theme="bunny"] .traffic-light {
+  background: linear-gradient(180deg, #2f2f35 0%, #1e1e23 100%);
+  border-radius: 34px;
+  box-shadow: 8px 8px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .light {
+  border-width: 6px;
+  box-shadow: inset 0 6px 14px rgba(255,255,255,.15);
+}
+
+html[data-theme="bunny"] .reward-shop-item,
+html[data-theme="bunny"] .reward-editor-item,
+html[data-theme="bunny"] .history-item,
+html[data-theme="bunny"] .report-stat,
+html[data-theme="bunny"] .parent-note-item,
+html[data-theme="bunny"] .category-item,
+html[data-theme="bunny"] .family-tree-person,
+html[data-theme="bunny"] .family-member-editor-item,
+html[data-theme="bunny"] .family-calendar-day,
+html[data-theme="bunny"] .calendar-day-details,
+html[data-theme="bunny"] .calendar-selected-description,
+html[data-theme="bunny"] .latest-feeling-child,
+html[data-theme="bunny"] .parent-feeling-item,
+html[data-theme="bunny"] .reward-request-item,
+html[data-theme="bunny"] .dashboard-stat,
+html[data-theme="bunny"] .child-status-row div,
+html[data-theme="bunny"] .timer-status,
+html[data-theme="bunny"] .timer-custom,
+html[data-theme="bunny"] .family-today-card,
+html[data-theme="bunny"] .calendar-editor,
+html[data-theme="bunny"] .family-tree-editor {
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.92);
+  background: linear-gradient(180deg, #fffafc 0%, #f9f4f7 100%);
+}
+
+html[data-theme="bunny"] .family-calendar-day.selected,
+html[data-theme="bunny"] .family-calendar-day.has-plan,
+html[data-theme="bunny"] .reward-request-item.pending,
+html[data-theme="bunny"] .reward-shop-item.available {
+  outline: 5px solid #efb4d2;
+  outline-offset: -5px;
+}
+
+html[data-theme="bunny"] .report-stat strong,
+html[data-theme="bunny"] .calendar-selected-title,
+html[data-theme="bunny"] .family-tree-main-person .family-tree-name,
+html[data-theme="bunny"] .reward-shop-name,
+html[data-theme="bunny"] .reward-editor-name,
+html[data-theme="bunny"] .history-item-title {
+  color: #c16f9c;
+}
+
+html[data-theme="bunny"] .feelings-grid,
+html[data-theme="bunny"] .rewards-list,
+html[data-theme="bunny"] .parent-feelings-list,
+html[data-theme="bunny"] .reward-request-list,
+html[data-theme="bunny"] .history-list,
+html[data-theme="bunny"] .family-member-editor-list {
+  gap: 12px;
+}
+
+html[data-theme="bunny"] .child-feeling-face {
+  background: linear-gradient(180deg, #fff8fb 0%, #f6edf2 100%);
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.92);
+  border-radius: 24px;
+}
+
+html[data-theme="bunny"] .child-feeling-face.active {
+  background: linear-gradient(180deg, #ffd4e7 0%, #efadc9 100%);
+}
+
+html[data-theme="bunny"] .timer-ring {
+  background: conic-gradient(#efadc9 0 100%, #ffffff 100% 100%);
+  border: 5px solid var(--outline);
+  box-shadow: 7px 7px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .timer-ring::before {
+  background: #fff9fc;
+}
+
+html[data-theme="bunny"] .family-tree-main-person {
+  background: linear-gradient(180deg, #ffd9ea 0%, #efb1cf 100%);
+  border: 5px solid var(--outline);
+  box-shadow: 6px 6px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .family-tree-branch {
+  background: linear-gradient(180deg, #f4bfd9, #e89fc3);
+  color: #6d3f59;
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.92);
+}
+
+html[data-theme="bunny"] .calendar-person,
+html[data-theme="bunny"] .calendar-note,
+html[data-theme="bunny"] .reward-shop-cost,
+html[data-theme="bunny"] .reward-editor-cost,
+html[data-theme="bunny"] .report-value {
+  color: #6a5160;
+}
+
+html[data-theme="bunny"] .level-chart-bar,
+html[data-theme="bunny"] .coin-chart-bar,
+html[data-theme="bunny"] .note-chart-bar {
+  border-radius: 999px;
+}
+
+html[data-theme="bunny"] .level-chart-bar.red { background: #f6a9ac; }
+html[data-theme="bunny"] .level-chart-bar.amber { background: #ffd65f; }
+html[data-theme="bunny"] .level-chart-bar.green { background: #9be38e; }
+html[data-theme="bunny"] .coin-chart-bar,
+html[data-theme="bunny"] .note-chart-bar { background: linear-gradient(90deg, #f4bfd9, #e89fc3); }
+
+html[data-theme="bunny"] .pin-pad-modal {
+  background: linear-gradient(180deg, #fbf8fa 0%, #f2ecf1 100%);
+  border: 5px solid var(--outline);
+  box-shadow: 8px 8px 0 rgba(0,0,0,.95);
+  border-radius: 28px;
+}
+
+html[data-theme="bunny"] .pin-box {
+  background: #fffdfd;
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 rgba(0,0,0,.92);
+}
+
+html[data-theme="bunny"] .pin-box.active {
+  outline: 4px solid #efb4d2;
+}
+
+html[data-theme="bunny"] .pin-keypad button,
+html[data-theme="bunny"] .pin-pad-actions button {
+  background: linear-gradient(180deg, #f8cee2 0%, #e7a5c8 100%);
+  color: #60384f;
+  border-radius: 16px;
+}
+
+html[data-theme="bunny"] .sync-pill.online { background: linear-gradient(180deg, #d8f6d0, #aeebb7); }
+html[data-theme="bunny"] .sync-pill.offline { background: linear-gradient(180deg, #fff4bf, #ffe084); color: #6b5b2d; }
+html[data-theme="bunny"] .sync-pill.error { background: linear-gradient(180deg, #ffc9d2, #f0a1af); color: #6f3b49; }
