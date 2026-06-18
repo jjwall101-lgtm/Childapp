@@ -154,3 +154,10 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Moved the page tabs to the very top of the app above Clara's main header.
 - Removed the top app padding so the tabs sit right at the top of the screen.
 - Kept Clara's main top square directly underneath the tabs.
+
+
+## v25 Fixed tabs
+
+- Made the page tabs fixed to the top of the screen.
+- The tabs now stay visible while scrolling.
+- Added automatic spacing so the tabs do not cover Clara's top square.

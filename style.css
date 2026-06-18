@@ -4605,3 +4605,34 @@ body[data-active-page="home"] #page-home .routine-tool {
     margin-top: 10px;
   }
 }
+
+
+/* v25: fixed page tabs.
+   The tabs now stay pinned to the top of the screen while scrolling. */
+:root {
+  --fixed-nav-height: 170px;
+}
+
+.app {
+  padding-top: calc(var(--fixed-nav-height) + 14px) !important;
+}
+
+.app-nav {
+  position: fixed !important;
+  top: env(safe-area-inset-top, 0) !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(520px, calc(100vw - 20px)) !important;
+  max-width: 520px !important;
+  z-index: 9999 !important;
+  margin: 0 !important;
+}
+
+.hero {
+  margin-top: 0 !important;
+}
+
+html {
+  scroll-padding-top: calc(var(--fixed-nav-height) + 18px);
+}

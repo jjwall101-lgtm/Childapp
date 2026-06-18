@@ -2992,6 +2992,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.body.dataset.activePage = page;
     updateHeroHomeLayout();
+    updateFixedNavSpacing();
 
     document.querySelectorAll(".nav-button").forEach(button => {
       button.classList.toggle("active", button.dataset.page === page);
@@ -3094,6 +3095,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+
+  function updateFixedNavSpacing() {
+    const nav = document.querySelector(".app-nav");
+
+    if (!nav) {
+      return;
+    }
+
+    const height = Math.ceil(nav.getBoundingClientRect().height);
+    document.documentElement.style.setProperty("--fixed-nav-height", `${height}px`);
+  }
+
   function updateDisplay() {
     const currentActivePage = document.querySelector(".page.active");
     if (currentActivePage) {
@@ -3137,6 +3150,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCelebration();
     updateParentLockDisplay();
     updateHeroHomeLayout();
+    updateFixedNavSpacing();
     updateNotificationStatus();
     maybeSendLatestNotification(currentData).catch(console.error);
   }
@@ -3722,7 +3736,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-24");
+      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-25");
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {
