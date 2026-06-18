@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const DEFAULT_FAMILY_MEMBERS = [
-    { id: "family-clara", icon: "👦", relationship: "Me", name: "Clara", branch: "Clara", description: "This is me." },
+    { id: "family-clara", icon: "👧", relationship: "Me", name: "Clara", branch: "Clara", description: "This is me." },
     { id: "family-mummy", icon: "👩", relationship: "Mummy", name: "Mummy", branch: "Parents", description: "Mummy loves me and helps me." },
     { id: "family-daddy", icon: "👨", relationship: "Daddy", name: "Daddy", branch: "Parents", description: "Daddy loves me and helps me." },
     { id: "family-joshua", icon: "👦", relationship: "Brother", name: "Joshua", branch: "Siblings", description: "My brother." },
@@ -412,7 +412,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .filter(member => member && typeof member === "object")
       .map(member => ({
         id: member.id || `family-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        icon: String(member.icon || "⭐").slice(0, 8),
+        icon: (() => {
+          const rawIcon = String(member.icon || "⭐").slice(0, 8);
+          const isClara = member.id === "family-clara" || String(member.branch || "") === "Clara" || (String(member.name || "").trim().toLowerCase() === "clara" && String(member.relationship || "").trim().toLowerCase() === "me");
+          return isClara && rawIcon === "👦" ? "👧" : rawIcon;
+        })(),
         relationship: String(member.relationship || "Family").slice(0, 40),
         name: String(member.name || "Family").slice(0, 60),
         branch: String(member.branch || "Other family").slice(0, 40),
@@ -1410,7 +1414,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const members = normalizeFamilyTree(currentData.familyTree);
     const clara = members.find(member => member.branch === "Clara") || {
-      icon: "👦",
+      icon: "👧",
       relationship: "Me",
       name: "Clara",
       description: "This is me."
