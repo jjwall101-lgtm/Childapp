@@ -3474,3 +3474,269 @@ body.child-mode #page-home .coin-card .notification-controls,
 body.child-mode #page-home .coin-card .parent-hint {
   display: none !important;
 }
+
+
+/* v8: pastel pink Clara theme overhaul inspired by reference screenshot. */
+html[data-theme="bunny"] {
+  --theme-bg: linear-gradient(180deg, #c4effb 0 28px, #f1c0d8 28px 100%);
+  --theme-card: #f8f5f7;
+  --theme-accent: #eba3c8;
+  --theme-dark: #7b4764;
+  --outline: #1f1f21;
+  --coin: #ff944f;
+}
+
+html[data-theme="bunny"] body,
+html[data-theme="bunny"] .app {
+  background: transparent;
+}
+
+html[data-theme="bunny"] .app {
+  max-width: 560px;
+  padding-top: 12px;
+}
+
+html[data-theme="bunny"] .hero,
+html[data-theme="bunny"] .coin-card,
+html[data-theme="bunny"] .streak-card,
+html[data-theme="bunny"] .behaviour-card,
+html[data-theme="bunny"] .treat-card,
+html[data-theme="bunny"] .rewards-shop-card,
+html[data-theme="bunny"] .parent-page-card,
+html[data-theme="bunny"] .history-card,
+html[data-theme="bunny"] .reports-card,
+html[data-theme="bunny"] .settings-card,
+html[data-theme="bunny"] .parent-panel,
+html[data-theme="bunny"] .chart-card,
+html[data-theme="bunny"] .feelings-card,
+html[data-theme="bunny"] .calendar-card,
+html[data-theme="bunny"] .family-tree-card,
+html[data-theme="bunny"] .timer-card,
+html[data-theme="bunny"] .child-dashboard-card {
+  background: #f7f5f7;
+  border: 5px solid var(--outline);
+  border-radius: 28px;
+  box-shadow: 8px 8px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .hero {
+  position: relative;
+  overflow: hidden;
+  background: #f7f5f7;
+}
+
+html[data-theme="bunny"] .hero::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 4px solid #efc8dd;
+  border-radius: 18px;
+  background: repeating-linear-gradient(90deg, rgba(230,160,195,.12) 0 22px, rgba(255,255,255,.0) 22px 48px);
+  pointer-events: none;
+}
+
+html[data-theme="bunny"] .profile-card {
+  position: relative;
+  z-index: 1;
+}
+
+html[data-theme="bunny"] .profile-card h1,
+html[data-theme="bunny"] body.child-mode .profile-card h1 {
+  color: #c76b9b;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+html[data-theme="bunny"] .app-icon-preview {
+  width: 118px;
+  height: 118px;
+  border-radius: 28px;
+  border: 5px solid #f1d68f;
+  box-shadow: 0 0 0 5px var(--outline);
+  margin-top: 12px;
+}
+
+html[data-theme="bunny"] .sync-pill,
+html[data-theme="bunny"] .small-parent-button,
+html[data-theme="bunny"] .mode-status-pill,
+html[data-theme="bunny"] .parent-hint,
+html[data-theme="bunny"] .streak-best {
+  border-radius: 999px;
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .sync-pill {
+  background: linear-gradient(180deg, #d7f6d1, #a8ebb3);
+  color: #32523a;
+}
+
+html[data-theme="bunny"] .small-parent-button,
+html[data-theme="bunny"] .mode-status-pill,
+html[data-theme="bunny"] .section-title,
+html[data-theme="bunny"] .panel-title,
+html[data-theme="bunny"] .today-level-pill,
+html[data-theme="bunny"] .child-welcome {
+  background: linear-gradient(180deg, #f4bfd9, #e89fc3);
+  color: #7a4064;
+}
+
+html[data-theme="bunny"] .section-title,
+html[data-theme="bunny"] .panel-title {
+  box-shadow: 4px 4px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .hero-child-stat {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 5px 5px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .hero-child-coins {
+  background: linear-gradient(180deg, #fffdf2, #ffe884);
+}
+
+html[data-theme="bunny"] .hero-child-streak {
+  background: linear-gradient(180deg, #dbf6d9, #92e29b);
+}
+
+html[data-theme="bunny"] .bunny-power-row > div {
+  border-radius: 16px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .app-nav {
+  background: #f4eff3;
+  border: 5px solid var(--outline);
+  border-radius: 28px;
+  box-shadow: 8px 8px 0 rgba(0,0,0,.95);
+  padding: 12px;
+  gap: 10px;
+  backdrop-filter: none;
+}
+
+html[data-theme="bunny"] body.child-mode .app-nav,
+html[data-theme="bunny"] body.parent-mode .app-nav {
+  background: #f4eff3;
+}
+
+html[data-theme="bunny"] .nav-button {
+  background: linear-gradient(180deg, #f8cee2 0%, #e7a5c8 100%);
+  color: #60384f;
+  border-radius: 18px;
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.95);
+  padding: 12px 6px;
+  font-size: 13px;
+}
+
+html[data-theme="bunny"] .nav-button.active {
+  background: linear-gradient(180deg, #efa8cd 0%, #df8ebb 100%);
+  color: #60384f;
+  transform: none;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.95);
+}
+
+html[data-theme="bunny"] .coin-card {
+  padding-top: 18px;
+}
+
+html[data-theme="bunny"] .coin-count,
+html[data-theme="bunny"] .streak-main span:first-child,
+html[data-theme="bunny"] .today-level-pill {
+  color: #6b5566;
+}
+
+html[data-theme="bunny"] .progress-outer {
+  background: #fff;
+  border-radius: 999px;
+  border: 5px solid var(--outline);
+  box-shadow: inset 0 1px 0 rgba(0,0,0,.05);
+  height: 30px;
+}
+
+html[data-theme="bunny"] .progress-inner {
+  background: linear-gradient(90deg, #ff9951 0%, #ffc067 50%, #9be38e 100%);
+}
+
+html[data-theme="bunny"] .journey-track,
+html[data-theme="bunny"] .child-bunny-journey .child-journey-track {
+  border-radius: 26px;
+  border: 5px solid var(--outline);
+  box-shadow: none;
+  background: linear-gradient(180deg, #a6d8ec 0 60%, #96dd86 60% 78%, #a36f42 78% 100%) !important;
+}
+
+html[data-theme="bunny"] .journey-start,
+html[data-theme="bunny"] .finish-line,
+html[data-theme="bunny"] .calendar-selected-description,
+html[data-theme="bunny"] .calendar-day-details,
+html[data-theme="bunny"] .family-calendar-day,
+html[data-theme="bunny"] .reward-shop-item,
+html[data-theme="bunny"] .reward-editor-item,
+html[data-theme="bunny"] .history-item,
+html[data-theme="bunny"] .report-stat,
+html[data-theme="bunny"] .parent-note-item,
+html[data-theme="bunny"] .category-item,
+html[data-theme="bunny"] .family-tree-person,
+html[data-theme="bunny"] .family-member-editor-item,
+html[data-theme="bunny"] .timer-status,
+html[data-theme="bunny"] .timer-custom,
+html[data-theme="bunny"] .latest-feeling-child,
+html[data-theme="bunny"] .parent-feeling-item {
+  background: #fffafc;
+  border-radius: 18px;
+}
+
+html[data-theme="bunny"] .coin-controls button,
+html[data-theme="bunny"] .notification-controls button,
+html[data-theme="bunny"] .reset-button,
+html[data-theme="bunny"] .collect-prize-button,
+html[data-theme="bunny"] .level-card,
+html[data-theme="bunny"] .locked-panel button,
+html[data-theme="bunny"] .note-form button,
+html[data-theme="bunny"] .reward-form button,
+html[data-theme="bunny"] .category-form button,
+html[data-theme="bunny"] .history-header button,
+html[data-theme="bunny"] .reports-card button,
+html[data-theme="bunny"] .settings-card button,
+html[data-theme="bunny"] .reward-editor-buttons button,
+html[data-theme="bunny"] .claim-reward-button,
+html[data-theme="bunny"] .delete-note-button,
+html[data-theme="bunny"] .edit-note-button,
+html[data-theme="bunny"] .timer-preset-button,
+html[data-theme="bunny"] .family-tree-add-button,
+html[data-theme="bunny"] .family-edit-button,
+html[data-theme="bunny"] .family-delete-button {
+  background: linear-gradient(180deg, #f8cee2 0%, #e7a5c8 100%);
+  color: #60384f;
+  border-radius: 16px;
+}
+
+html[data-theme="bunny"] .light.red,
+html[data-theme="bunny"] .red-card {
+  background: #f6a9ac;
+}
+html[data-theme="bunny"] .light.amber,
+html[data-theme="bunny"] .amber-card {
+  background: #ffd65f;
+}
+html[data-theme="bunny"] .light.green,
+html[data-theme="bunny"] .green-card {
+  background: #9be38e;
+}
+
+html[data-theme="bunny"] .child-dashboard-card,
+html[data-theme="bunny"] .family-today-card {
+  background: linear-gradient(180deg, #fff9fc, #f6f2f5);
+}
+
+html[data-theme="bunny"] .jay-signature {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  html[data-theme="bunny"] .hero::before { inset: 12px; }
+  html[data-theme="bunny"] .app-nav { padding: 10px; gap: 8px; }
+  html[data-theme="bunny"] .nav-button { font-size: 12px; padding: 11px 5px; }
+}
