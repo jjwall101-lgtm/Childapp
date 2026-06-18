@@ -1,41 +1,24 @@
-# Clara v55 Parent Carrot Hotfix
+# Clara sync version
 
-This fixes the manual `+5`, `+10`, `+50`, `-5`, `-10`, and `-50` carrot buttons when the app shows `Parent controls locked`.
+This version keeps the latest rules and adds Firebase syncing.
 
-## Upload to GitHub
+## Rules
 
-Upload these files into the same folder as Clara's app:
+- Every new day starts on amber
+- Okay to green adds 50 carrots every time
+- Pressing green again while already green adds 0 carrots
+- Amazing to amber removes 0 carrots
+- Okay is safe
+- Clara must be amber before he can go green
+- Amazing can go straight to red
+- Moving onto red removes 50 carrots
+- Pressing red again while already red removes 0 carrots
+- 1000 carrots unlocks the special treat message
+- Changes can sync between phones after Firebase config is added
 
-- `clara-parent-carrot-fix.js`
-- `sw.js`
+## Refresh note
 
-Do not delete your existing `index.html`, `style.css`, `script.js`, Firebase files, or `clara-sync-bridge.js`.
+This version uses:
 
-## Edit index.html
-
-Add the contents of `index-add-this-before-body.txt` just above `</body>`.
-
-It must be after the normal `script.js` line and after the `clara-sync-bridge.js` line.
-
-## Parent PIN
-
-The default PIN in the snippet is:
-
-`1234`
-
-Change this line if you want a different PIN:
-
-```html
-window.CLARA_PARENT_PIN = "1234";
-```
-
-## How it works
-
-- Tapping a carrot +/- button while locked asks for the parent PIN.
-- After the PIN is accepted, parent controls unlock for 30 minutes.
-- The button updates the carrot bank locally.
-- It also calls `claraRealSync.pushNow()` if your v54 sync bridge is installed, so the change is pushed to Firebase.
-
-## After upload
-
-Everyone should open the GitHub/Netlify app link in Chrome once and refresh. If the home screen shortcut still shows the old version, delete and re-add the shortcut.
+style.css?v=10
+script.js?v=10
