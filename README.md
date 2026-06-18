@@ -124,3 +124,10 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Moved Calm Corner out of the Home page body and into Clara's main top square.
 - Added a bunny help bubble saying "Help! I need to calm down."
 - Kept the calm choice buttons in the top square.
+
+
+## v20 Collapsed Calm Corner
+
+- Calm Corner options are now hidden by default.
+- Tapping the bunny help bubble opens the calm options.
+- After Clara chooses an option, the choices collapse again.

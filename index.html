@@ -6,7 +6,7 @@
 
   <title>Clara</title>
 
-  <link rel="stylesheet" href="style.css?v=clara-tools-19" />
+  <link rel="stylesheet" href="style.css?v=clara-tools-20" />
   <link rel="manifest" href="manifest.json" />
 
   <link rel="icon" href="icon.png" />
@@ -61,15 +61,16 @@
 
         <section class="hero-calm-tool child-mode-only" aria-label="Calm Corner">
           <div class="section-title">CALM CORNER</div>
-          <div class="hero-calm-bubble">
+          <button type="button" class="hero-calm-bubble" id="calmToggleButton" aria-expanded="false">
             <div class="hero-calm-bunny">🐰</div>
             <div class="hero-calm-text">
               <strong>Help!</strong>
               <span>I need to calm down.</span>
+              <small>Tap the bunny for calm choices.</small>
             </div>
-          </div>
-          <div class="calm-choice-list hero-calm-choice-list" id="calmChoiceList"></div>
-          <p class="calm-status hero-calm-status" id="calmStatus">Tap something that might help right now.</p>
+          </button>
+          <div class="calm-choice-list hero-calm-choice-list" id="calmChoiceList" hidden></div>
+          <p class="calm-status hero-calm-status" id="calmStatus" hidden>Tap something that might help right now.</p>
         </section>
 
         <section class="hero-child-stats child-mode-only" aria-label="Clara's carrot bank and streak">
@@ -708,6 +709,6 @@
     <div class="jay-signature"></div>
   </main>
 
-  <script src="script.js?v=clara-tools-19" type="module"></script>
+  <script src="script.js?v=clara-tools-20" type="module"></script>
 </body>
 </html>

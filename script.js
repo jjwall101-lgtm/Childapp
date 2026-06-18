@@ -151,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     routineStepsInput: $("routineStepsInput"),
     saveRoutineButton: $("saveRoutineButton"),
     resetRoutineButton: $("resetRoutineButton"),
+    calmToggleButton: $("calmToggleButton"),
     calmChoiceList: $("calmChoiceList"),
     calmStatus: $("calmStatus"),
     parentCalmList: $("parentCalmList"),
@@ -1967,6 +1968,36 @@ document.addEventListener("DOMContentLoaded", () => {
     await saveData(data);
   }
 
+
+  function setCalmOptionsOpen(isOpen) {
+    const calmTool = document.querySelector(".hero-calm-tool");
+
+    if (calmTool) {
+      calmTool.classList.toggle("open", Boolean(isOpen));
+    }
+
+    if (elements.calmToggleButton) {
+      elements.calmToggleButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+
+    if (elements.calmChoiceList) {
+      elements.calmChoiceList.hidden = !isOpen;
+    }
+
+    if (elements.calmStatus) {
+      elements.calmStatus.hidden = !isOpen;
+      if (!isOpen) {
+        elements.calmStatus.textContent = "Tap something that might help right now.";
+      }
+    }
+  }
+
+  function toggleCalmOptions() {
+    const calmTool = document.querySelector(".hero-calm-tool");
+    const isOpen = calmTool?.classList.contains("open");
+    setCalmOptionsOpen(!isOpen);
+  }
+
   function updateCalmTool() {
     if (!elements.calmChoiceList) {
       return;
@@ -3692,7 +3723,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-19");
+      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-20");
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {
@@ -3965,6 +3996,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (elements.saveRoutineButton) {
       elements.saveRoutineButton.addEventListener("click", saveRoutine);
+    }
+
+    if (elements.calmToggleButton) {
+      elements.calmToggleButton.addEventListener("click", toggleCalmOptions);
     }
 
     if (elements.resetRoutineButton) {

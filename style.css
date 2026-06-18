@@ -4494,3 +4494,38 @@ body.child-mode .hero-calm-tool {
     font-size: 18px;
   }
 }
+
+
+/* v20: Calm Corner choices stay collapsed until Clara taps the bunny help bubble. */
+.hero-calm-bubble {
+  width: 100%;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+}
+
+.hero-calm-bubble:active {
+  transform: translateY(2px);
+}
+
+.hero-calm-text small {
+  display: block;
+  margin-top: 5px;
+  color: #9b6d84;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.hero-calm-tool:not(.open) .hero-calm-choice-list,
+.hero-calm-tool:not(.open) .hero-calm-status {
+  display: none !important;
+}
+
+.hero-calm-tool.open .hero-calm-choice-list {
+  display: grid !important;
+}
+
+.hero-calm-tool.open .hero-calm-status {
+  display: block !important;
+}
