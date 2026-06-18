@@ -95,3 +95,11 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Other tabs no longer show the full top Carrot Bank.
 - Added a stronger JavaScript and CSS guard so the layout updates correctly when switching tabs.
 - Bumped service worker registration to help phones refresh the update.
+
+
+## v16 Consistent top layout
+
+- Made the same compact Clara top layout appear on every child tab.
+- Removed the large top Carrot Bank from every child tab.
+- Kept the carrot/streak boxes and bunny journey visible across child tabs.
+- Kept the full Carrot Bank controls available in Parent Mode.

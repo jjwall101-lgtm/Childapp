@@ -4322,3 +4322,43 @@ body:not(.show-home-carrot-bank) .child-bunny-journey {
 body:not(.show-home-carrot-bank) .child-bunny-journey {
   display: block;
 }
+
+
+/* v16: keep the same compact top layout on every child tab.
+   This is the layout with the carrot/streak boxes and bunny journey. */
+body.child-mode .hero-carrot-bank {
+  display: none !important;
+}
+
+body.child-mode .hero-child-stats {
+  display: grid !important;
+}
+
+body.child-mode .child-bunny-journey {
+  display: block !important;
+}
+
+body.child-mode.show-home-carrot-bank .hero-carrot-bank {
+  display: none !important;
+}
+
+body.child-mode.show-home-carrot-bank .hero-child-stats,
+body.child-mode.show-home-carrot-bank .child-bunny-journey {
+  display: grid !important;
+}
+
+body.child-mode.show-home-carrot-bank .child-bunny-journey {
+  display: block !important;
+}
+
+/* Keep the separate full Carrot Bank hidden on Child Home so the top stays clean. */
+body.child-mode[data-active-page="home"] #page-home .coin-card {
+  display: none !important;
+}
+
+/* Parent mode can still use the main Carrot Bank card and controls. */
+body.parent-mode .hero-child-stats,
+body.parent-mode .child-bunny-journey,
+body.parent-mode .hero-carrot-bank {
+  display: none !important;
+}

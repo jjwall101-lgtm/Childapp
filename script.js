@@ -3046,24 +3046,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function updateHeroHomeLayout() {
-    const activePage = document.querySelector(".page.active");
-    const activeName = activePage ? activePage.id.replace("page-", "") : document.body.dataset.activePage || "home";
-    const showCarrotBank = childMode && activeName === "home";
+    const useCompactHeader = childMode;
 
-    document.body.classList.toggle("show-home-carrot-bank", showCarrotBank);
+    document.body.classList.toggle("show-compact-top-layout", useCompactHeader);
+    document.body.classList.remove("show-home-carrot-bank");
 
     const heroBank = document.querySelector(".hero-carrot-bank");
     if (heroBank) {
-      heroBank.hidden = !showCarrotBank;
-      heroBank.style.display = showCarrotBank ? "block" : "none";
+      heroBank.hidden = true;
+      heroBank.style.display = "none";
     }
 
     document.querySelectorAll(".hero-child-stats, .child-bunny-journey").forEach(item => {
-      if (showCarrotBank) {
-        item.style.display = "none";
-      } else {
-        item.style.display = "";
-      }
+      item.style.display = useCompactHeader ? "" : "";
     });
   }
 
@@ -3696,7 +3691,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-15");
+      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=clara-tools-16");
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {
