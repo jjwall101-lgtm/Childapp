@@ -32,8 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const PIN_KEY = "claraParentPinV1";
   const THEME_KEY = "claraSelectedTheme";
   const NOTE_AUTHOR_KEY = "claraParentNoteAuthorV1";
-  const LAST_NOTIFICATION_KEY = "claraLastNotificationV1";
+  const LAST_NOTIFICATION_KEY = "claraLastNotificationV2";
   const CHILD_MODE_KEY = "claraChildModeV1";
+  const TIMER_STATE_KEY = "claraVisualTimerV1";
   const DEFAULT_PIN = "1234";
 
   const DEFAULT_CATEGORIES = [
@@ -56,6 +57,16 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: "reward-250-treat", icon: "🍫", name: "Small treat", cost: 250 },
     { id: "reward-500-park", icon: "🛝", name: "Park trip", cost: 500 },
     { id: "reward-1000-prize", icon: "🎁", name: "Big prize", cost: 1000 }
+  ];
+
+  const DEFAULT_FAMILY_MEMBERS = [
+    { id: "family-clara", icon: "👦", relationship: "Me", name: "Clara", branch: "Clara", description: "This is me." },
+    { id: "family-mummy", icon: "👩", relationship: "Mummy", name: "Mummy", branch: "Parents", description: "Mummy loves me and helps me." },
+    { id: "family-daddy", icon: "👨", relationship: "Daddy", name: "Daddy", branch: "Parents", description: "Daddy loves me and helps me." },
+    { id: "family-joshua", icon: "👦", relationship: "Brother", name: "Joshua", branch: "Siblings", description: "My brother." },
+    { id: "family-harriet", icon: "👶", relationship: "Sister", name: "Harriet", branch: "Siblings", description: "My baby sister." },
+    { id: "family-nanny", icon: "👵", relationship: "Nanny", name: "Nanny", branch: "Other family", description: "My nanny." },
+    { id: "family-grandad", icon: "👴", relationship: "Grandad", name: "Grandad", branch: "Other family", description: "My grandad." }
   ];
 
   const FEELINGS = [
@@ -82,8 +93,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let notificationsReady = false;
   let serviceWorkerRegistration = null;
   let editingNoteId = "";
+  let editingFamilyMemberId = "";
   let currentData = getLocalData();
   let selectedCalendarDate = getDateISO();
+  let timerState = getLocalTimerState();
+  let timerInterval = null;
+  let timerFinishedAlertShown = false;
 
   const $ = id => document.getElementById(id);
 
@@ -101,8 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
     childNextReward: $("childNextReward"),
     childTodayLevel: $("childTodayLevel"),
     childStreakCount: $("childStreakCount"),
-    childProgressCharacter: $("childProgressCharacter"),
-    childFinishGoal: $("childFinishGoal"),
     feelingsGrid: $("feelingsGrid"),
     latestFeelingChild: $("latestFeelingChild"),
     parentDashboardGrid: $("parentDashboardGrid"),
@@ -122,6 +135,25 @@ document.addEventListener("DOMContentLoaded", () => {
     calendarNoteInput: $("calendarNoteInput"),
     saveCalendarEntryButton: $("saveCalendarEntryButton"),
     deleteCalendarEntryButton: $("deleteCalendarEntryButton"),
+    familyTreeDisplay: $("familyTreeDisplay"),
+    familyTreeEditor: $("familyTreeEditor"),
+    familyRelationshipInput: $("familyRelationshipInput"),
+    familyNameInput: $("familyNameInput"),
+    familyIconInput: $("familyIconInput"),
+    familyBranchSelect: $("familyBranchSelect"),
+    familyDescriptionInput: $("familyDescriptionInput"),
+    addFamilyMemberButton: $("addFamilyMemberButton"),
+    cancelFamilyEditButton: $("cancelFamilyEditButton"),
+    familyMemberEditorList: $("familyMemberEditorList"),
+    timerRing: $("timerRing"),
+    timerCharacter: $("timerCharacter"),
+    timerTime: $("timerTime"),
+    timerStatus: $("timerStatus"),
+    startTimerButton: $("startTimerButton"),
+    pauseTimerButton: $("pauseTimerButton"),
+    resetTimerButton: $("resetTimerButton"),
+    customTimerMinutes: $("customTimerMinutes"),
+    setCustomTimerButton: $("setCustomTimerButton"),
     parentPageUnlockButton: $("parentPageUnlockButton"),
     settingsUnlockButton: $("settingsUnlockButton"),
     lockStatus: $("lockStatus"),
@@ -225,7 +257,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function getDateISO(date = new Date()) {
-    return date.toISOString().slice(0, 10);
+    // Use the phone's local date, not UTC.
+    // toISOString() can shift the app back a day after midnight in the UK,
+    // which made the calendar show one day while selecting another.
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   }
 
   function formatDateTime(date = new Date()) {
@@ -256,6 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
       rewardRequests: [],
       feelingLogs: [],
       familyCalendar: [],
+      familyTree: DEFAULT_FAMILY_MEMBERS,
       categories: DEFAULT_CATEGORIES,
       streak: {
         current: 0,
@@ -364,6 +403,23 @@ document.addEventListener("DOMContentLoaded", () => {
       .slice(0, 365);
   }
 
+  function normalizeFamilyTree(familyTree) {
+    const source = Array.isArray(familyTree) && familyTree.length ? familyTree : DEFAULT_FAMILY_MEMBERS;
+
+    return source
+      .filter(member => member && typeof member === "object")
+      .map(member => ({
+        id: member.id || `family-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        icon: String(member.icon || "⭐").slice(0, 8),
+        relationship: String(member.relationship || "Family").slice(0, 40),
+        name: String(member.name || "Family").slice(0, 60),
+        branch: String(member.branch || "Other family").slice(0, 40),
+        description: String(member.description || "").slice(0, 300)
+      }))
+      .filter(member => member.name.trim() && member.relationship.trim())
+      .slice(0, 80);
+  }
+
   function normalizeCategories(categories) {
     const list = Array.isArray(categories) && categories.length ? categories : DEFAULT_CATEGORIES;
     const clean = list
@@ -435,6 +491,7 @@ document.addEventListener("DOMContentLoaded", () => {
       rewardRequests: normalizeRewardRequests(data?.rewardRequests),
       feelingLogs: normalizeFeelingLogs(data?.feelingLogs),
       familyCalendar: normalizeFamilyCalendar(data?.familyCalendar),
+      familyTree: normalizeFamilyTree(data?.familyTree),
       categories: normalizeCategories(data?.categories),
       streak: {
         current: Math.max(0, Number(data?.streak?.current) || 0),
@@ -601,6 +658,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateProgressCharacter();
     updatePrizeDetails();
+    updateTimerDisplay();
   }
 
   function applyDailyReset(data) {
@@ -677,17 +735,6 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.syncStatus.className = `sync-pill ${className}`.trim();
   }
 
-
-  function getLevelLabel(level) {
-    const labels = {
-      green: "Amazing",
-      amber: "Okay",
-      red: "Bad day"
-    };
-
-    return labels[level] || String(level || "");
-  }
-
   function addHistoryEntry(data, entry) {
     const now = new Date();
     data.history = normalizeHistory(data.history);
@@ -708,9 +755,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getPrizeDetails(theme = getCurrentTheme()) {
     return {
-      icon: "🐰",
+      icon: "🥕",
       name: "BUNNY PRIZE",
-      subtitle: "Hop hop hooray!"
+      subtitle: "Clara reached her carrot goal!"
     };
   }
 
@@ -759,7 +806,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     addHistoryEntry(data, {
-      type: "coin",
+      type: "carrot",
       level: actualChange > 0 ? "gain" : "loss",
       text: actualChange > 0 ? `Manual carrot gain: +${actualChange}` : `Manual carrot loss: ${actualChange}`,
       coinChange: actualChange,
@@ -799,7 +846,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (level === "green" && previousLevel !== "amber") {
-      alert("Go to Okay before Amazing.");
+      alert("Go to amber before green.");
       return;
     }
 
@@ -810,14 +857,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (level === "green" && previousLevel === "amber") {
       coinChange = data.settings.greenCoins;
-      text = `Moved to Amazing: +${coinChange} carrots`;
+      text = `Moved to GREEN: +${coinChange} carrots`;
     } else if (level === "red" && previousLevel !== "red") {
       coinChange = -data.settings.redCoins;
-      text = `Moved to Bad day: -${data.settings.redCoins} carrots`;
+      text = `Moved to RED: -${data.settings.redCoins} carrots`;
     } else if (level === "amber") {
-      text = "Moved to Okay";
+      text = "Moved to AMBER";
     } else {
-      text = `Moved to ${getLevelLabel(level)}`;
+      text = `Moved to ${level.toUpperCase()}`;
     }
 
     const before = data.coinTotal;
@@ -902,7 +949,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     addHistoryEntry(data, {
-      type: "coin",
+      type: "carrot",
       level: "reset",
       text: "Carrots reset to 0",
       coinChange: -before,
@@ -1230,7 +1277,7 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "level",
       level,
       category,
-      text: note ? `Quick daily log: ${getLevelLabel(level)} - ${note}` : `Quick daily log: ${getLevelLabel(level)}`,
+      text: note ? `Quick daily log: ${level.toUpperCase()} - ${note}` : `Quick daily log: ${level.toUpperCase()}`,
       coinChange: actualChange,
       coinsAfter: data.coinTotal
     });
@@ -1266,7 +1313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const next = rewards.find(reward => reward.cost > total) || rewards.find(reward => total >= reward.cost);
 
     elements.childCoinTotal.textContent = total;
-    elements.childTodayLevel.textContent = getLevelLabel(currentData.today.level);
+    elements.childTodayLevel.textContent = currentData.today.level.toUpperCase();
     elements.childStreakCount.textContent = currentData.streak.current;
 
     const latestFeeling = normalizeFeelingLogs(currentData.feelingLogs)[0];
@@ -1346,6 +1393,265 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function branchSortValue(branch) {
+    const order = ["Clara", "Parents", "Siblings", "Mum's side", "Dad's side", "Special people", "Other family"];
+    const index = order.indexOf(branch);
+    return index === -1 ? order.length : index;
+  }
+
+  function updateFamilyTree() {
+    const display = elements.familyTreeDisplay;
+
+    if (!display) {
+      return;
+    }
+
+    const members = normalizeFamilyTree(currentData.familyTree);
+    const clara = members.find(member => member.branch === "Clara") || {
+      icon: "👦",
+      relationship: "Me",
+      name: "Clara",
+      description: "This is me."
+    };
+
+    const branches = {};
+    members
+      .filter(member => member.id !== clara.id && member.branch !== "Clara")
+      .forEach(member => {
+        const branch = member.branch || "Other family";
+        branches[branch] = branches[branch] || [];
+        branches[branch].push(member);
+      });
+
+    const branchNames = Object.keys(branches)
+      .sort((a, b) => branchSortValue(a) - branchSortValue(b) || a.localeCompare(b));
+
+    display.innerHTML = `
+      <div class="family-tree-root">
+        <div class="family-tree-person family-tree-main-person">
+          <div class="family-person-icon">${escapeAttr(clara.icon)}</div>
+          <div>
+            <strong>${escapeAttr(clara.name)}</strong>
+            <span>${escapeAttr(clara.relationship)}</span>
+            <p>${escapeAttr(clara.description || "This is me.")}</p>
+          </div>
+        </div>
+      </div>
+      <div class="family-tree-branches" id="familyTreeBranches"></div>
+    `;
+
+    const branchWrap = display.querySelector("#familyTreeBranches");
+
+    if (!branchNames.length) {
+      branchWrap.innerHTML = "<p class='empty-notes'>No family members added yet.</p>";
+    } else {
+      branchNames.forEach(branchName => {
+        const section = document.createElement("section");
+        section.className = "family-tree-branch";
+
+        const title = document.createElement("div");
+        title.className = "family-branch-title";
+        title.textContent = branchName;
+        section.appendChild(title);
+
+        branches[branchName].forEach(member => {
+          const card = document.createElement("article");
+          card.className = "family-tree-person";
+          card.innerHTML = `
+            <div class="family-person-icon">${escapeAttr(member.icon)}</div>
+            <div>
+              <strong>${escapeAttr(member.name)}</strong>
+              <span>${escapeAttr(member.relationship)}</span>
+              ${member.description ? `<p>${escapeAttr(member.description)}</p>` : ""}
+            </div>
+          `;
+          section.appendChild(card);
+        });
+
+        branchWrap.appendChild(section);
+      });
+    }
+
+    updateFamilyMemberEditor();
+  }
+
+  async function addOrUpdateFamilyMember() {
+    if (!await verifyParentPin("edit the family tree")) {
+      return;
+    }
+
+    const relationship = elements.familyRelationshipInput?.value.trim() || "";
+    const name = elements.familyNameInput?.value.trim() || "";
+    const icon = elements.familyIconInput?.value.trim() || "⭐";
+    const branch = elements.familyBranchSelect?.value || "Other family";
+    const description = elements.familyDescriptionInput?.value.trim() || "";
+
+    if (!relationship || !name) {
+      alert("Add a relationship and name first.");
+      return;
+    }
+
+    const data = await getLatestData();
+    const members = normalizeFamilyTree(data.familyTree);
+
+    if (editingFamilyMemberId) {
+      data.familyTree = members.map(member => {
+        if (member.id !== editingFamilyMemberId) {
+          return member;
+        }
+
+        return { ...member, relationship, name, icon, branch, description };
+      });
+    } else {
+      data.familyTree = [
+        ...members,
+        {
+          id: `family-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          relationship,
+          name,
+          icon,
+          branch,
+          description
+        }
+      ];
+    }
+
+    addHistoryEntry(data, {
+      type: "family",
+      level: "family",
+      category: "Family tree",
+      text: editingFamilyMemberId ? `Family tree updated: ${relationship} ${name}` : `Family member added: ${relationship} ${name}`,
+      coinChange: 0,
+      coinsAfter: data.coinTotal
+    });
+
+    clearFamilyForm();
+    await saveData(data);
+  }
+
+  function clearFamilyForm() {
+    editingFamilyMemberId = "";
+
+    if (elements.familyRelationshipInput) elements.familyRelationshipInput.value = "";
+    if (elements.familyNameInput) elements.familyNameInput.value = "";
+    if (elements.familyIconInput) elements.familyIconInput.value = "";
+    if (elements.familyBranchSelect) elements.familyBranchSelect.value = "Parents";
+    if (elements.familyDescriptionInput) elements.familyDescriptionInput.value = "";
+    if (elements.addFamilyMemberButton) elements.addFamilyMemberButton.textContent = "Add Family Member";
+    if (elements.cancelFamilyEditButton) elements.cancelFamilyEditButton.hidden = true;
+  }
+
+  async function editFamilyMember(memberId) {
+    if (!await verifyParentPin("edit this family member")) {
+      return;
+    }
+
+    const member = normalizeFamilyTree(currentData.familyTree).find(item => item.id === memberId);
+
+    if (!member) {
+      return;
+    }
+
+    editingFamilyMemberId = member.id;
+    elements.familyRelationshipInput.value = member.relationship;
+    elements.familyNameInput.value = member.name;
+    elements.familyIconInput.value = member.icon;
+    elements.familyBranchSelect.value = member.branch === "Clara" ? "Parents" : member.branch;
+    elements.familyDescriptionInput.value = member.description || "";
+    elements.addFamilyMemberButton.textContent = "Save Family Member";
+    elements.cancelFamilyEditButton.hidden = false;
+    switchPage("family");
+  }
+
+  async function deleteFamilyMember(memberId) {
+    if (!await verifyParentPin("delete this family member")) {
+      return;
+    }
+
+    const member = normalizeFamilyTree(currentData.familyTree).find(item => item.id === memberId);
+
+    if (!member) {
+      return;
+    }
+
+    if (member.branch === "Clara") {
+      alert("Keep Clara as the middle of the family tree.");
+      return;
+    }
+
+    if (!confirm(`Delete ${member.name} from the family tree?`)) {
+      return;
+    }
+
+    const data = await getLatestData();
+    data.familyTree = normalizeFamilyTree(data.familyTree).filter(item => item.id !== memberId);
+
+    addHistoryEntry(data, {
+      type: "family",
+      level: "family",
+      category: "Family tree",
+      text: `Family member removed: ${member.relationship} ${member.name}`,
+      coinChange: 0,
+      coinsAfter: data.coinTotal
+    });
+
+    await saveData(data);
+  }
+
+  function updateFamilyMemberEditor() {
+    const list = elements.familyMemberEditorList;
+
+    if (!list) {
+      return;
+    }
+
+    if (!parentUnlocked) {
+      list.innerHTML = "<p class='empty-notes'>Unlock Parent Mode to edit family members.</p>";
+      return;
+    }
+
+    const members = normalizeFamilyTree(currentData.familyTree)
+      .sort((a, b) => branchSortValue(a.branch) - branchSortValue(b.branch) || a.relationship.localeCompare(b.relationship));
+
+    list.innerHTML = "";
+
+    members.forEach(member => {
+      const item = document.createElement("article");
+      item.className = "family-member-editor-item";
+
+      const info = document.createElement("div");
+      info.className = "family-member-editor-info";
+      info.innerHTML = `
+        <span class="family-member-editor-icon">${escapeAttr(member.icon)}</span>
+        <div>
+          <strong>${escapeAttr(member.relationship)} - ${escapeAttr(member.name)}</strong>
+          <span>${escapeAttr(member.branch)}</span>
+        </div>
+      `;
+
+      const actions = document.createElement("div");
+      actions.className = "family-member-editor-actions";
+
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.textContent = "Edit";
+      edit.addEventListener("click", () => editFamilyMember(member.id));
+
+      const del = document.createElement("button");
+      del.type = "button";
+      del.textContent = member.branch === "Clara" ? "Main" : "Delete";
+      del.disabled = member.branch === "Clara";
+      del.className = "delete-family-member-button";
+      del.addEventListener("click", () => deleteFamilyMember(member.id));
+
+      actions.appendChild(edit);
+      actions.appendChild(del);
+      item.appendChild(info);
+      item.appendChild(actions);
+      list.appendChild(item);
+    });
+  }
+
   function updateParentDashboard() {
     const grid = elements.parentDashboardGrid;
 
@@ -1378,12 +1684,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     [
       ["Carrots", currentData.coinTotal],
-      ["Today", getLevelLabel(currentData.today.level)],
+      ["Today", currentData.today.level.toUpperCase()],
       ["Pending rewards", pendingRequests],
       ["Latest feeling", latestFeelingText],
       ["Notes today", notesToday],
-      ["Amazing logs", greenLogs],
-      ["Bad day logs", redLogs]
+      ["Green logs", greenLogs],
+      ["Red logs", redLogs]
     ].forEach(([label, value]) => {
       const card = document.createElement("div");
       card.className = "dashboard-stat";
@@ -1494,11 +1800,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const entries = normalizeFamilyCalendar(currentData.familyCalendar);
     const today = new Date();
     const todayISO = getDateISO(today);
+    const datesToShow = [];
+
+    if (childMode) {
+      // Child view stays simple: only today plus the next 6 days.
+      for (let offset = 0; offset < 7; offset += 1) {
+        datesToShow.push(new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset, 12));
+      }
+    } else {
+      // Parent view shows the whole current calendar month.
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber += 1) {
+        datesToShow.push(new Date(year, month, dayNumber, 12));
+      }
+    }
+
+    grid.setAttribute("aria-label", childMode ? "Next seven days" : "Current month");
     grid.innerHTML = "";
 
-    for (let offset = 0; offset < 28; offset += 1) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + offset);
+    datesToShow.forEach(date => {
       const dateISO = getDateISO(date);
       const entry = entries.find(item => item.dateISO === dateISO);
 
@@ -1532,9 +1855,8 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       button.addEventListener("click", chooseCalendarDay);
-      button.addEventListener("pointerup", chooseCalendarDay);
       grid.appendChild(button);
-    }
+    });
 
     const visibleDates = [...grid.querySelectorAll(".family-calendar-day")]
       .map(button => button.dataset.date);
@@ -1688,7 +2010,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (cost < 1) {
-      alert("Add a valid coin cost.");
+      alert("Add a valid carrot cost.");
       return;
     }
 
@@ -1962,8 +2284,242 @@ document.addEventListener("DOMContentLoaded", () => {
     URL.revokeObjectURL(url);
   }
 
+ 
+  function getDefaultTimerState() {
+    return {
+      durationSeconds: 300,
+      remainingSeconds: 300,
+      running: false,
+      endTime: 0
+    };
+  }
+
+  function normalizeTimerState(state = {}) {
+    const duration = Math.max(60, Math.min(7200, Math.round(Number(state.durationSeconds) || 300)));
+    let remaining = Math.max(0, Math.min(duration, Math.round(Number(state.remainingSeconds) || duration)));
+    const running = Boolean(state.running);
+    const endTime = Math.max(0, Number(state.endTime) || 0);
+
+    if (running && endTime) {
+      remaining = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
+    }
+
+    return {
+      durationSeconds: duration,
+      remainingSeconds: Math.min(duration, remaining),
+      running: running && remaining > 0,
+      endTime: running && remaining > 0 ? endTime : 0
+    };
+  }
+
+  function getLocalTimerState() {
+    try {
+      const raw = localStorage.getItem(TIMER_STATE_KEY);
+      return normalizeTimerState(raw ? JSON.parse(raw) : getDefaultTimerState());
+    } catch (error) {
+      console.error(error);
+      return getDefaultTimerState();
+    }
+  }
+
+  function storeLocalTimerState() {
+    localStorage.setItem(TIMER_STATE_KEY, JSON.stringify(normalizeTimerState(timerState)));
+  }
+
+  function formatTimerTime(totalSeconds) {
+    const safeSeconds = Math.max(0, Math.round(Number(totalSeconds) || 0));
+    const minutes = Math.floor(safeSeconds / 60);
+    const seconds = safeSeconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }
+
+  function getTimerCharacter() {
+    return "🐰";
+  }
+
+  function updateTimerFromClock() {
+    if (!timerState.running) {
+      return false;
+    }
+
+    const remaining = Math.max(0, Math.ceil((timerState.endTime - Date.now()) / 1000));
+    timerState.remainingSeconds = remaining;
+
+    if (remaining <= 0) {
+      timerState.running = false;
+      timerState.endTime = 0;
+      storeLocalTimerState();
+      return true;
+    }
+
+    storeLocalTimerState();
+    return false;
+  }
+
+  function updateTimerDisplay() {
+    if (!elements.timerTime || !elements.timerRing) {
+      return;
+    }
+
+    timerState = normalizeTimerState(timerState);
+
+    if (timerState.running) {
+      updateTimerFromClock();
+    }
+
+    const duration = Math.max(60, timerState.durationSeconds);
+    const remaining = Math.max(0, timerState.remainingSeconds);
+    const usedPercent = Math.max(0, Math.min(100, ((duration - remaining) / duration) * 100));
+    const leftPercent = Math.max(0, 100 - usedPercent);
+
+    elements.timerTime.textContent = formatTimerTime(remaining);
+    elements.timerRing.style.background = `conic-gradient(var(--theme-accent) 0 ${leftPercent}%, rgba(255,255,255,0.72) ${leftPercent}% 100%)`;
+
+    if (elements.timerCharacter) {
+      elements.timerCharacter.textContent = getTimerCharacter();
+    }
+
+    if (elements.timerStatus) {
+      if (timerState.running) {
+        elements.timerStatus.textContent = "Timer running";
+      } else if (remaining === 0) {
+        elements.timerStatus.textContent = "Finished";
+      } else if (remaining < duration) {
+        elements.timerStatus.textContent = "Paused";
+      } else {
+        elements.timerStatus.textContent = "Ready";
+      }
+    }
+
+    if (elements.startTimerButton) {
+      elements.startTimerButton.disabled = timerState.running;
+      elements.startTimerButton.textContent = remaining === 0 ? "Start Again" : "Start";
+    }
+
+    if (elements.pauseTimerButton) {
+      elements.pauseTimerButton.disabled = !timerState.running;
+    }
+
+    document.querySelectorAll("[data-timer-minutes]").forEach(button => {
+      const seconds = Math.round(Number(button.dataset.timerMinutes) * 60);
+      button.classList.toggle("active", seconds === duration && !timerState.running);
+    });
+  }
+
+  function startTimerTick() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+    }
+
+    timerInterval = window.setInterval(() => {
+      const finished = updateTimerFromClock();
+      updateTimerDisplay();
+
+      if (finished) {
+        finishTimer();
+      }
+    }, 500);
+  }
+
+  function stopTimerTick() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function setTimerDuration(minutes) {
+    const duration = Math.max(60, Math.min(7200, Math.round(Number(minutes) * 60 || 300)));
+    timerState = {
+      durationSeconds: duration,
+      remainingSeconds: duration,
+      running: false,
+      endTime: 0
+    };
+    timerFinishedAlertShown = false;
+    stopTimerTick();
+    storeLocalTimerState();
+    updateTimerDisplay();
+  }
+
+  function startVisualTimer() {
+    timerState = normalizeTimerState(timerState);
+
+    if (timerState.remainingSeconds <= 0) {
+      timerState.remainingSeconds = timerState.durationSeconds;
+    }
+
+    timerState.running = true;
+    timerState.endTime = Date.now() + (timerState.remainingSeconds * 1000);
+    timerFinishedAlertShown = false;
+    storeLocalTimerState();
+    startTimerTick();
+    updateTimerDisplay();
+  }
+
+  function pauseVisualTimer() {
+    updateTimerFromClock();
+    timerState.running = false;
+    timerState.endTime = 0;
+    storeLocalTimerState();
+    stopTimerTick();
+    updateTimerDisplay();
+  }
+
+  function resetVisualTimer() {
+    timerState = normalizeTimerState(timerState);
+    timerState.running = false;
+    timerState.endTime = 0;
+    timerState.remainingSeconds = timerState.durationSeconds;
+    timerFinishedAlertShown = false;
+    storeLocalTimerState();
+    stopTimerTick();
+    updateTimerDisplay();
+  }
+
+  function finishTimer() {
+    stopTimerTick();
+    timerState = normalizeTimerState({
+      ...timerState,
+      remainingSeconds: 0,
+      running: false,
+      endTime: 0
+    });
+    storeLocalTimerState();
+    updateTimerDisplay();
+
+    if (navigator.vibrate) {
+      navigator.vibrate([250, 120, 250, 120, 450]);
+    }
+
+    showPhoneNotification("Timer finished", {
+      body: "Clara's timer has finished.",
+      tag: "clara-timer"
+    }).catch(console.error);
+
+    if (!timerFinishedAlertShown) {
+      timerFinishedAlertShown = true;
+      window.setTimeout(() => alert("Timer finished!"), 50);
+    }
+  }
+
+  function setCustomTimerDuration() {
+    const minutes = Math.round(Number(elements.customTimerMinutes?.value) || 0);
+
+    if (minutes < 1 || minutes > 120) {
+      alert("Choose between 1 and 120 minutes.");
+      return;
+    }
+
+    setTimerDuration(minutes);
+
+    if (elements.customTimerMinutes) {
+      elements.customTimerMinutes.value = "";
+    }
+  }
+
   function switchPage(page) {
-    if (childMode && !["home", "feelings", "rewards", "calendar"].includes(page)) {
+    if (childMode && !["home", "feelings", "rewards", "calendar", "timer", "family"].includes(page)) {
       page = "home";
     }
 
@@ -1991,7 +2547,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelectorAll(".nav-button").forEach(button => {
-      const parentOnlyPage = !["home", "feelings", "rewards", "calendar"].includes(button.dataset.page);
+      const parentOnlyPage = !["home", "feelings", "rewards", "calendar", "timer", "family"].includes(button.dataset.page);
       button.hidden = childMode && parentOnlyPage;
     });
 
@@ -2031,6 +2587,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateParentNotes();
     updateRewardEditor();
     updateCategoryList();
+    updateFamilyMemberEditor();
   }
 
   function updateParentOnlyButtons() {
@@ -2062,7 +2619,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (childMode) {
       const activePage = document.querySelector(".page.active");
-      if (activePage && !["page-home", "page-feelings", "page-rewards", "page-calendar"].includes(activePage.id)) {
+      if (activePage && !["page-home", "page-feelings", "page-rewards", "page-calendar", "page-timer", "page-family"].includes(activePage.id)) {
         switchPage("home");
       }
     }
@@ -2081,6 +2638,8 @@ document.addEventListener("DOMContentLoaded", () => {
     updateRewardRequests();
     updateParentDashboard();
     updateCalendar();
+    updateFamilyTree();
+    updateTimerDisplay();
     updateParentNotes();
     updateRewardEditor();
     updateCategoryOptions();
@@ -2096,24 +2655,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateThemeText() {
     updateProgressCharacter();
-
-    const themeColor = "#f8b9d4";
-
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#ff9ccd");
   }
 
   function updateProgressCharacter() {
     if (!elements.progressCharacter) {
       return;
     }
-
-    const theme = getCurrentTheme();
-
     elements.progressCharacter.textContent = "🐰";
-
-    if (elements.childProgressCharacter) {
-      elements.childProgressCharacter.textContent = "🐰";
-    }
   }
 
   function updateCoinDisplay() {
@@ -2124,17 +2673,8 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.coinTotalMain.textContent = total;
     elements.goalDisplay.textContent = goal;
     elements.finishGoal.textContent = goal;
-
-    if (elements.childFinishGoal) {
-      elements.childFinishGoal.textContent = goal;
-    }
-
     elements.coinProgress.style.width = `${percent}%`;
     elements.progressCharacter.style.left = `calc(${percent}% - 18px)`;
-
-    if (elements.childProgressCharacter) {
-      elements.childProgressCharacter.style.left = `calc(${percent}% - 18px)`;
-    }
     elements.greenCoinValue.textContent = `+${currentData.settings.greenCoins} carrots`;
     elements.redCoinValue.textContent = `-${currentData.settings.redCoins} carrots`;
 
@@ -2152,7 +2692,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateLevelDisplay() {
     const level = currentData.today.level;
-    const label = getLevelLabel(level);
+    const label = level.toUpperCase();
 
     elements.todayLevelPill.textContent = label;
     elements.todayLevelPill.style.background = level === "red" ? "var(--red)" : level === "green" ? "var(--green)" : "var(--amber)";
@@ -2169,7 +2709,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentData.streak.current > 0) {
       elements.streakMessage.textContent = `Great work. Clara has reached green ${currentData.streak.current} day(s) in a row.`;
     } else {
-      elements.streakMessage.textContent = "Reach Amazing today to start a streak.";
+      elements.streakMessage.textContent = "Reach green today to start a streak.";
     }
   }
 
@@ -2484,9 +3024,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (elements.reportSummary) {
       elements.reportSummary.innerHTML = "";
       [
-        ["Amazing days", greenDays],
-        ["Bad day logs", redItems],
-        ["Okay logs", amberItems],
+        ["Green days", greenDays],
+        ["Red logs", redItems],
+        ["Amber logs", amberItems],
         ["Carrots gained", coinsGained],
         ["Carrots lost", coinsLost],
         ["Rewards claimed", rewardsClaimed],
@@ -2501,9 +3041,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     drawChart(elements.levelChart, {
-      "Amazing": recent.filter(i => i.level === "green").length,
-      "Okay": amberItems,
-      "Bad day": redItems
+      Green: recent.filter(i => i.level === "green").length,
+      Amber: amberItems,
+      Red: redItems
     });
 
     drawChart(elements.coinChart, {
@@ -2560,9 +3100,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return [
       "Clara's weekly report",
       "",
-      `Amazing logs: ${recent.filter(i => i.level === "green").length}`,
-      `Okay logs: ${recent.filter(i => i.level === "amber").length}`,
-      `Bad day logs: ${recent.filter(i => i.level === "red").length}`,
+      `Green logs: ${recent.filter(i => i.level === "green").length}`,
+      `Amber logs: ${recent.filter(i => i.level === "amber").length}`,
+      `Red logs: ${recent.filter(i => i.level === "red").length}`,
       `Carrots gained: ${coinsGained}`,
       `Carrots lost: ${coinsLost}`,
       `Rewards claimed: ${recent.filter(i => i.type === "reward").length}`,
@@ -2633,7 +3173,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=2");
+      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=51");
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {
@@ -2712,7 +3252,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function latestNotifyItem(data) {
     return normalizeHistory(data.history).find(item => {
-      if (item.type === "coin" || item.type === "reward" || item.type === "prize") {
+      if (item.type === "carrot" || item.type === "reward" || item.type === "prize") {
         return true;
       }
 
@@ -2750,7 +3290,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       await showPhoneNotification(title, {
         body: `${item.text}. Total: ${item.coinsAfter}`,
-        tag: `coin-${item.id}`
+        tag: `carrot-${item.id}`
       });
     }
   }
@@ -2876,7 +3416,7 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.parentPageUnlockButton.addEventListener("click", async () => { await verifyParentPin("unlock parent page"); });
     elements.settingsUnlockButton.addEventListener("click", async () => { await verifyParentPin("unlock settings"); });
 
-    if (elements.themeSelect) elements.themeSelect.addEventListener("change", event => setTheme(event.target.value));
+    if (elements.themeSelect) { elements.themeSelect.addEventListener("change", () => setTheme("bunny")); }
 
     elements.deduct5Button.addEventListener("click", () => adjustCoins(-5));
     elements.deduct10Button.addEventListener("click", () => adjustCoins(-10));
@@ -2916,6 +3456,34 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.deleteCalendarEntryButton.addEventListener("click", deleteCalendarEntry);
     elements.calendarDateInput.addEventListener("change", () => selectCalendarDay(elements.calendarDateInput.value));
 
+    if (elements.addFamilyMemberButton) {
+      elements.addFamilyMemberButton.addEventListener("click", addOrUpdateFamilyMember);
+    }
+
+    if (elements.cancelFamilyEditButton) {
+      elements.cancelFamilyEditButton.addEventListener("click", clearFamilyForm);
+    }
+
+    document.querySelectorAll("[data-timer-minutes]").forEach(button => {
+      button.addEventListener("click", () => setTimerDuration(button.dataset.timerMinutes));
+    });
+
+    if (elements.startTimerButton) {
+      elements.startTimerButton.addEventListener("click", startVisualTimer);
+    }
+
+    if (elements.pauseTimerButton) {
+      elements.pauseTimerButton.addEventListener("click", pauseVisualTimer);
+    }
+
+    if (elements.resetTimerButton) {
+      elements.resetTimerButton.addEventListener("click", resetVisualTimer);
+    }
+
+    if (elements.setCustomTimerButton) {
+      elements.setCustomTimerButton.addEventListener("click", setCustomTimerDuration);
+    }
+
     elements.copyWeeklyReportButton.addEventListener("click", copyWeeklyReport);
 
     elements.saveCoinSettingsButton.addEventListener("click", saveCoinSettings);
@@ -2934,9 +3502,12 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("offline", () => setSyncStatus("Offline - saved on phone", "offline"));
   }
 
-  setTheme(getCurrentTheme());
+  setTheme("bunny");
   connectEvents();
   setupServiceWorker().finally(updateNotificationStatus);
+  if (timerState.running) {
+    startTimerTick();
+  }
   updateDisplay();
   initFirebase();
 });

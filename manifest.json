@@ -3,8 +3,8 @@
   "short_name": "Clara",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#fff2f8",
-  "theme_color": "#f8b9d4",
+  "background_color": "#ffe7f3",
+  "theme_color": "#ff9ccd",
   "icons": [
     {
       "src": "icon-192.png",

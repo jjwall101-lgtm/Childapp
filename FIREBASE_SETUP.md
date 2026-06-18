@@ -2,49 +2,29 @@
 
 This version syncs Clara's app between phones using Firebase Firestore.
 
-## What you need to do
+The app is already set to use Clara's Firebase project in `script.js`:
 
-1. Go to Firebase Console.
-2. Create a new project.
-3. Add a Web App.
-4. Copy the Firebase config.
-5. Open `script.js`.
-6. Replace this section:
+```js
+projectId: "childapp-af257"
+```
 
-const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY_HERE",
-  authDomain: "PASTE_YOUR_AUTH_DOMAIN_HERE",
-  projectId: "PASTE_YOUR_PROJECT_ID_HERE",
-  storageBucket: "PASTE_YOUR_STORAGE_BUCKET_HERE",
-  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
-  appId: "PASTE_YOUR_APP_ID_HERE"
-};
+## What to upload
 
-with your real Firebase config.
+Upload all files from this zip to the root of the Clara GitHub repository.
 
-7. In Firebase, create a Firestore Database.
-8. Start in test mode for now.
-9. Put the rules from `firestore.rules` into Firestore Rules.
-10. Upload all files to GitHub.
-11. Open the same GitHub Pages link on both phones.
+## Firestore rules
 
-## Files to upload
+Use the included `firestore.rules` file in Firebase Console > Firestore Database > Rules.
 
-- index.html
-- style.css
-- script.js
-- manifest.json
-- icon.png
-- icon-192.png
-- firestore.rules
-- README.md
-- FIREBASE_SETUP.md
+The included rules are simple setup rules. They allow open read/write while testing. Once everything is working, lock it down with Firebase Authentication.
 
 ## Important
 
-The included Firestore rules are easy mode:
+This copy uses its own localStorage keys and Firestore record:
 
-allow read, write: if true;
+```text
+claraAppDataV1
+clara-shared-family-app
+```
 
-That makes setup simple, but it is not properly private.
-Once it is working, you can make it safer with Firebase Authentication.
+That means it should not overwrite the other app's local data on the same phone/browser.

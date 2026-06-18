@@ -1,24 +1,28 @@
-# Clara sync version
+# Clara bunny sync version
 
-This version keeps the latest rules and adds Firebase syncing.
+This package is built from the uploaded app files and changed for Clara.
 
-## Rules
+## Included changes
 
-- Every new day starts on amber
-- Okay to green adds 50 carrots every time
-- Pressing green again while already green adds 0 carrots
-- Amazing to amber removes 0 carrots
-- Okay is safe
-- Clara must be amber before he can go green
-- Amazing can go straight to red
-- Moving onto red removes 50 carrots
-- Pressing red again while already red removes 0 carrots
-- 1000 carrots unlocks the special treat message
-- Changes can sync between phones after Firebase config is added
+- App name changed to Clara.
+- Uploaded Clara picture is used as `icon.png` and `icon-192.png`.
+- Bunny theme is locked on; the theme selector has been removed.
+- Coin wording has been changed to carrots.
+- Firebase config points to Clara's project: `childapp-af257`.
+- App storage keys and Firestore family record are changed so it does not clash with the other app.
+- Heavy decorative animations are disabled/reduced to improve performance on phones.
+- Timer and Family tabs from the uploaded v51 files are kept.
+
+## Upload files
+
+Upload everything in this zip to the root of the GitHub repo.
 
 ## Refresh note
 
 This version uses:
 
-style.css?v=10
-script.js?v=10
+- `style.css?v=clara-bunny-1`
+- `script.js?v=clara-bunny-1`
+- `sw.js?v=clara-bunny-1`
+
+If the phone still shows the old version, close the app fully, reopen it, or clear the site data/cache once.

@@ -2785,3 +2785,624 @@ body.child-mode[data-active-page="calendar"] .child-today-card,
 body.child-mode[data-active-page="feelings"] .child-today-card {
   display: none !important;
 }
+
+
+/* CALENDAR FIX V48: keep Jay signature from covering calendar days */
+.jay-signature {
+  position: static;
+  width: fit-content;
+  margin: 14px 0 0 auto;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+
+/* FAMILY TREE TAB - CAMERON APP 2.2 */
+
+.family-tree-card {
+  border: 5px solid var(--outline);
+  box-shadow: 6px 6px 0 var(--outline);
+  border-radius: 28px;
+  background: var(--theme-card);
+  padding: 16px 12px 18px;
+  margin-bottom: 14px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+html[data-theme="space"] .family-tree-card {
+  color: white;
+  box-shadow: 6px 6px 0 #020316;
+}
+
+.family-tree-subtitle {
+  font-weight: 900;
+  text-align: center;
+}
+
+.family-tree-display {
+  display: grid;
+  gap: 16px;
+  margin-top: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.family-tree-root {
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.family-tree-root::after {
+  content: "";
+  width: 6px;
+  height: 24px;
+  display: block;
+  margin-top: -1px;
+  background: var(--outline);
+  border-radius: 999px;
+}
+
+.family-tree-person {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.78);
+  text-align: left;
+}
+
+html[data-theme="space"] .family-tree-person {
+  background: #10103e;
+}
+
+.family-tree-main-person {
+  width: min(100%, 330px);
+  background: linear-gradient(180deg, #fff6b7, #ffd447);
+  color: var(--outline);
+}
+
+html[data-theme="space"] .family-tree-main-person {
+  background: linear-gradient(180deg, #45d8ff, #5166ff);
+  color: white;
+}
+
+html[data-theme="minecraft"] .family-tree-main-person {
+  background: linear-gradient(180deg, #bdf3ad, #5cae40);
+  color: white;
+}
+
+.family-person-icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  border-radius: 50%;
+  background: white;
+  color: var(--outline);
+  font-size: 32px;
+}
+
+.family-tree-person strong,
+.family-tree-person span,
+.family-tree-person p {
+  display: block;
+  font-weight: 900;
+}
+
+.family-tree-person span {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.family-tree-person p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.family-tree-branches {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  position: relative;
+}
+
+.family-tree-branch {
+  padding: 12px;
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 var(--outline);
+  border-radius: 24px;
+  background: rgba(255,255,255,0.44);
+  display: grid;
+  gap: 10px;
+  position: relative;
+}
+
+html[data-theme="space"] .family-tree-branch {
+  background: rgba(16,16,62,0.82);
+}
+
+.family-branch-title {
+  width: fit-content;
+  margin: -4px auto 0;
+  padding: 7px 13px;
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  border-radius: 999px;
+  background: var(--theme-accent);
+  color: var(--theme-dark);
+  font-weight: 950;
+  font-size: 14px;
+}
+
+.family-tree-editor {
+  margin-top: 16px;
+  padding: 14px;
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 var(--outline);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.68);
+  text-align: left;
+  position: relative;
+  z-index: 2;
+}
+
+html[data-theme="space"] .family-tree-editor {
+  background: #10103e;
+}
+
+.family-tree-editor button,
+.family-member-editor-actions button {
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  border-radius: 14px;
+  background: var(--theme-accent);
+  color: var(--theme-dark);
+  padding: 12px 10px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.family-tree-editor button:active,
+.family-member-editor-actions button:active {
+  transform: translateY(3px);
+  box-shadow: 1px 1px 0 var(--outline);
+}
+
+.cancel-family-edit-button,
+.family-member-editor-actions .delete-family-member-button {
+  background: #ffb2b0;
+  color: var(--outline);
+}
+
+.family-member-editor-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.family-member-editor-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.76);
+}
+
+html[data-theme="space"] .family-member-editor-item {
+  background: #10103e;
+}
+
+.family-member-editor-info {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 9px;
+  align-items: center;
+}
+
+.family-member-editor-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--outline);
+  border-radius: 50%;
+  background: white;
+  color: var(--outline);
+  font-size: 26px;
+}
+
+.family-member-editor-info strong,
+.family-member-editor-info span {
+  display: block;
+  font-weight: 900;
+}
+
+.family-member-editor-info span {
+  font-size: 12px;
+}
+
+.family-member-editor-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+body.child-mode .nav-button[data-page="family"] {
+  display: block;
+}
+
+body.child-mode .app-nav {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 500px;
+}
+
+body.child-mode .family-tree-editor {
+  display: none !important;
+}
+
+@media (min-width: 520px) {
+  .family-tree-branches {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .family-tree-branch:first-child:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 420px) {
+  .family-tree-person {
+    grid-template-columns: 52px 1fr;
+  }
+
+  .family-person-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 29px;
+  }
+
+  .family-member-editor-item {
+    grid-template-columns: 1fr;
+  }
+
+  .family-member-editor-actions {
+    justify-content: stretch;
+  }
+
+  .family-member-editor-actions button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 390px) {
+  body.child-mode .app-nav {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 340px;
+  }
+}
+
+/* VISUAL TIMER TAB */
+
+.timer-card {
+  border: 5px solid var(--outline);
+  box-shadow: 6px 6px 0 var(--outline);
+  border-radius: 28px;
+  background: var(--theme-card);
+  padding: 16px 12px 18px;
+  margin-bottom: 14px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+html[data-theme="space"] .timer-card {
+  color: white;
+  box-shadow: 6px 6px 0 #020316;
+}
+
+.timer-subtitle {
+  margin: 12px 0;
+  font-weight: 900;
+  text-align: center;
+}
+
+.timer-stage {
+  display: grid;
+  place-items: center;
+  margin: 14px auto;
+}
+
+.timer-ring {
+  width: min(78vw, 310px);
+  height: min(78vw, 310px);
+  display: grid;
+  grid-template-rows: 1fr auto auto 1fr;
+  align-items: center;
+  justify-items: center;
+  border: 7px solid var(--outline);
+  box-shadow: 7px 7px 0 var(--outline);
+  border-radius: 50%;
+  background: conic-gradient(var(--theme-accent) 0 100%, rgba(255,255,255,0.72) 100% 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-ring::before {
+  content: "";
+  position: absolute;
+  inset: 24px;
+  border: 5px solid var(--outline);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.86);
+  z-index: 0;
+}
+
+html[data-theme="space"] .timer-ring::before {
+  background: #10103e;
+}
+
+.timer-character,
+.timer-ring strong,
+.timer-ring small {
+  position: relative;
+  z-index: 1;
+}
+
+.timer-character {
+  grid-row: 2;
+  font-size: 54px;
+  line-height: 1;
+  animation: timerCharacterBob 2.4s infinite ease-in-out;
+}
+
+.timer-ring strong {
+  grid-row: 3;
+  font-size: clamp(48px, 16vw, 76px);
+  font-weight: 950;
+  line-height: 1;
+}
+
+.timer-ring small {
+  grid-row: 4;
+  align-self: start;
+  margin-top: 4px;
+  font-weight: 950;
+  font-size: 16px;
+}
+
+.timer-status {
+  display: inline-block;
+  margin: 4px auto 14px;
+  padding: 10px 16px;
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.82);
+  font-weight: 950;
+}
+
+html[data-theme="space"] .timer-status {
+  background: #10103e;
+}
+
+.timer-presets,
+.timer-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-top: 10px;
+}
+
+.timer-presets button,
+.timer-actions button,
+.timer-custom button {
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  border-radius: 16px;
+  background: white;
+  color: var(--outline);
+  padding: 13px 8px;
+  font-weight: 950;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.timer-presets button.active,
+.timer-actions button:first-child,
+.timer-custom button {
+  background: var(--theme-accent);
+  color: var(--theme-dark);
+}
+
+.timer-actions button:nth-child(2) {
+  background: #fff18a;
+}
+
+.timer-actions button:nth-child(3) {
+  background: #ffb2b0;
+}
+
+.timer-presets button:active,
+.timer-actions button:active,
+.timer-custom button:active {
+  transform: translateY(3px);
+  box-shadow: 1px 1px 0 var(--outline);
+}
+
+.timer-presets button:disabled,
+.timer-actions button:disabled,
+.timer-custom button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.timer-custom {
+  margin-top: 16px;
+  padding: 14px;
+  border: 4px solid var(--outline);
+  box-shadow: 4px 4px 0 var(--outline);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.68);
+  text-align: left;
+}
+
+html[data-theme="space"] .timer-custom {
+  background: #10103e;
+}
+
+body.child-mode .nav-button[data-page="timer"] {
+  display: block;
+}
+
+body.child-mode .timer-custom {
+  display: none !important;
+}
+
+@keyframes timerCharacterBob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.05); }
+}
+
+@media (max-width: 390px) {
+  .timer-presets,
+  .timer-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .timer-ring {
+    width: min(82vw, 280px);
+    height: min(82vw, 280px);
+  }
+}
+
+
+/* Clara bunny-only theme and performance trim */
+html[data-theme="bunny"] {
+  --theme-bg:
+    radial-gradient(circle at 12% 12%, rgba(255,255,255,.95) 0 34px, transparent 35px),
+    radial-gradient(circle at 82% 20%, rgba(255,255,255,.8) 0 28px, transparent 29px),
+    linear-gradient(180deg, #bdeeff 0%, #ffe7f3 46%, #c7f3ba 47%, #93db82 100%);
+  --theme-card: #fff7fb;
+  --theme-accent: #ff9ccd;
+  --theme-dark: #6d2450;
+  --coin: #ff914d;
+}
+
+html[data-theme="bunny"] body,
+body {
+  background: var(--theme-bg);
+}
+
+.theme-switcher {
+  display: none !important;
+}
+
+.hero,
+.coin-card,
+.streak-card,
+.behaviour-card,
+.treat-card,
+.rewards-shop-card,
+.parent-page-card,
+.history-card,
+.reports-card,
+.settings-card,
+.parent-panel,
+.chart-card,
+.feelings-card,
+.calendar-card,
+.family-tree-card,
+.timer-card,
+.child-dashboard-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,247,251,.96));
+}
+
+.app-icon-preview {
+  border-radius: 30px;
+  background: #fff;
+}
+
+.bunny-power-row {
+  gap: 12px;
+  min-height: 52px;
+  margin-top: 8px;
+}
+
+.bunny-power-row > div {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border: 4px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.bunny-power-row span {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.carrot-art { background: #fff2e8 !important; }
+.flower-art { background: #fff1fa !important; }
+.heart-art { background: #ffe1ef !important; }
+.bunny-face-art { background: #ffffff !important; }
+
+.progress-inner {
+  background: linear-gradient(90deg, #ff914d, #ffb36b, #7ed957);
+}
+
+.journey-track {
+  background: linear-gradient(180deg, #bdeeff 0 56%, #9ee98d 57% 78%, #9b693f 79% 100%) !important;
+}
+
+.moon-top,
+.moon-base,
+.mc-grass,
+.mc-dirt {
+  display: none !important;
+}
+
+.grass,
+.dirt {
+  display: block !important;
+}
+
+/* Reduce lag: no looping decorative animations, short transitions only. */
+*, *::before, *::after {
+  animation: none !important;
+  scroll-behavior: auto !important;
+}
+
+.progress-inner,
+.journey-character,
+.nav-button,
+button {
+  transition-duration: .08s !important;
+}
+
+.hero-bg,
+.hero-bg-one,
+.hero-bg-two {
+  display: none !important;
+}
+
+.power-row > * {
+  will-change: auto !important;
+}
