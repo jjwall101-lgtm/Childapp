@@ -27,4 +27,4 @@ claraAppDataV1
 clara-shared-family-app
 ```
 
-That means it should not overwrite Cameron's local data on the same phone/browser.
+That means it should not overwrite the other app's local data on the same phone/browser.
