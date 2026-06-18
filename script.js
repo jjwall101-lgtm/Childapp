@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const LAST_NOTIFICATION_KEY = "claraLastNotificationV1";
   const CHILD_MODE_KEY = "claraChildModeV1";
   const DEFAULT_PIN = "1234";
+  const CLARA_APP_VERSION = "clara-v57-bunny-timer-cache-20260618";
 
   const DEFAULT_CATEGORIES = [
     "General",
@@ -81,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let childMode = localStorage.getItem(CHILD_MODE_KEY) !== "false";
   let notificationsReady = false;
   let serviceWorkerRegistration = null;
+  let timerFinishSaveInProgress = false;
   let editingNoteId = "";
   let currentData = getLocalData();
   let selectedCalendarDate = getDateISO();
@@ -122,6 +124,16 @@ document.addEventListener("DOMContentLoaded", () => {
     calendarNoteInput: $("calendarNoteInput"),
     saveCalendarEntryButton: $("saveCalendarEntryButton"),
     deleteCalendarEntryButton: $("deleteCalendarEntryButton"),
+    timerDisplay: $("timerDisplay"),
+    timerProgress: $("timerProgress"),
+    timerStatus: $("timerStatus"),
+    timerBunny: $("timerBunny"),
+    timerStartButton: $("timerStartButton"),
+    timerPauseButton: $("timerPauseButton"),
+    timerResetButton: $("timerResetButton"),
+    timerMinutesInput: $("timerMinutesInput"),
+    timerLabelInput: $("timerLabelInput"),
+    saveTimerSettingsButton: $("saveTimerSettingsButton"),
     parentPageUnlockButton: $("parentPageUnlockButton"),
     settingsUnlockButton: $("settingsUnlockButton"),
     lockStatus: $("lockStatus"),
@@ -273,6 +285,15 @@ document.addEventListener("DOMContentLoaded", () => {
         id: "",
         theme: "bunny"
       },
+      timer: {
+        durationSeconds: 300,
+        remainingSeconds: 300,
+        running: false,
+        startedAt: "",
+        endAt: "",
+        label: "Bunny timer",
+        updatedAt: ""
+      },
       memberUids: {}
     };
   }
@@ -416,6 +437,23 @@ document.addEventListener("DOMContentLoaded", () => {
       .slice(0, 500);
   }
 
+
+  function normalizeTimer(timer = {}) {
+    const durationSeconds = Math.max(10, Math.min(7200, Math.round(Number(timer?.durationSeconds) || 300)));
+    const fallbackRemaining = timer?.remainingSeconds === 0 ? 0 : durationSeconds;
+    const remainingSeconds = Math.max(0, Math.min(durationSeconds, Math.round(Number(timer?.remainingSeconds ?? fallbackRemaining) || 0)));
+
+    return {
+      durationSeconds,
+      remainingSeconds,
+      running: Boolean(timer?.running),
+      startedAt: timer?.startedAt || "",
+      endAt: timer?.endAt || "",
+      label: String(timer?.label || "Bunny timer").slice(0, 40),
+      updatedAt: timer?.updatedAt || ""
+    };
+  }
+
   function normalizeData(data) {
     const defaults = getDefaultData();
     const settings = normalizeSettings(data?.settings || defaults.settings);
@@ -447,6 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
         id: data?.celebration?.id || "",
         theme: data?.celebration?.theme || getCurrentTheme()
       },
+      timer: normalizeTimer(data?.timer || defaults.timer),
       memberUids: data?.memberUids && typeof data.memberUids === "object" ? data.memberUids : {}
     };
   }
@@ -1962,8 +2001,214 @@ document.addEventListener("DOMContentLoaded", () => {
     URL.revokeObjectURL(url);
   }
 
+
+  function formatTimerSeconds(totalSeconds) {
+    const safeSeconds = Math.max(0, Math.round(Number(totalSeconds) || 0));
+    const minutes = Math.floor(safeSeconds / 60);
+    const seconds = safeSeconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }
+
+  function getTimerRemaining(timer = currentData.timer) {
+    const safeTimer = normalizeTimer(timer);
+
+    if (safeTimer.running && safeTimer.endAt) {
+      const msLeft = new Date(safeTimer.endAt).getTime() - Date.now();
+      return Math.max(0, Math.ceil(msLeft / 1000));
+    }
+
+    return safeTimer.remainingSeconds;
+  }
+
+  function updateTimerDisplay() {
+    if (!elements.timerDisplay || !elements.timerProgress || !elements.timerStatus) {
+      return;
+    }
+
+    const timer = normalizeTimer(currentData.timer);
+    const remaining = getTimerRemaining(timer);
+    const duration = Math.max(10, Number(timer.durationSeconds) || 300);
+    const elapsed = duration - remaining;
+    const percent = Math.max(0, Math.min(100, (elapsed / duration) * 100));
+    const timerCard = document.querySelector(".timer-card");
+
+    elements.timerDisplay.textContent = formatTimerSeconds(remaining);
+    elements.timerProgress.style.width = `${percent}%`;
+
+    if (elements.timerMinutesInput && document.activeElement !== elements.timerMinutesInput) {
+      elements.timerMinutesInput.value = Math.max(1, Math.round(duration / 60));
+    }
+
+    if (elements.timerLabelInput && document.activeElement !== elements.timerLabelInput) {
+      elements.timerLabelInput.value = timer.label || "Bunny timer";
+    }
+
+    if (timer.running && remaining > 0) {
+      elements.timerStatus.textContent = `${timer.label || "Bunny timer"} is running.`;
+    } else if (remaining === 0) {
+      elements.timerStatus.textContent = "All done. Great job!";
+    } else {
+      elements.timerStatus.textContent = `${timer.label || "Bunny timer"} is ready.`;
+    }
+
+    if (timerCard) {
+      timerCard.classList.toggle("timer-running", Boolean(timer.running && remaining > 0));
+      timerCard.classList.toggle("timer-finished", remaining === 0 && !timer.running);
+    }
+  }
+
+  async function setTimerDuration(seconds, label = "Bunny timer") {
+    const durationSeconds = Math.max(10, Math.min(7200, Math.round(Number(seconds) || 300)));
+    const data = await getLatestData();
+
+    data.timer = {
+      durationSeconds,
+      remainingSeconds: durationSeconds,
+      running: false,
+      startedAt: "",
+      endAt: "",
+      label: String(label || data.timer?.label || "Bunny timer").slice(0, 40),
+      updatedAt: new Date().toISOString()
+    };
+
+    addHistoryEntry(data, {
+      type: "timer",
+      level: "timer",
+      category: "Timer",
+      text: `Timer set to ${formatTimerSeconds(durationSeconds)}`,
+      coinChange: 0,
+      coinsAfter: data.coinTotal
+    });
+
+    await saveData(data);
+  }
+
+  async function saveTimerSettings() {
+    if (!await verifyParentPin("save timer settings")) {
+      return;
+    }
+
+    const minutes = Math.max(1, Math.min(120, Math.round(Number(elements.timerMinutesInput?.value) || 5)));
+    const label = elements.timerLabelInput?.value.trim() || "Bunny timer";
+    await setTimerDuration(minutes * 60, label);
+  }
+
+  async function startTimer() {
+    const data = await getLatestData();
+    const timer = normalizeTimer(data.timer);
+    let remaining = getTimerRemaining(timer);
+
+    if (remaining <= 0) {
+      remaining = timer.durationSeconds;
+    }
+
+    const now = new Date();
+    const endAt = new Date(now.getTime() + remaining * 1000);
+
+    data.timer = {
+      ...timer,
+      remainingSeconds: remaining,
+      running: true,
+      startedAt: now.toISOString(),
+      endAt: endAt.toISOString(),
+      updatedAt: now.toISOString()
+    };
+
+    await saveData(data);
+  }
+
+  async function pauseTimer() {
+    const data = await getLatestData();
+    const timer = normalizeTimer(data.timer);
+    const remaining = getTimerRemaining(timer);
+
+    data.timer = {
+      ...timer,
+      remainingSeconds: remaining,
+      running: false,
+      startedAt: "",
+      endAt: "",
+      updatedAt: new Date().toISOString()
+    };
+
+    await saveData(data);
+  }
+
+  async function resetTimer() {
+    const data = await getLatestData();
+    const timer = normalizeTimer(data.timer);
+
+    data.timer = {
+      ...timer,
+      remainingSeconds: timer.durationSeconds,
+      running: false,
+      startedAt: "",
+      endAt: "",
+      updatedAt: new Date().toISOString()
+    };
+
+    await saveData(data);
+  }
+
+  async function finishTimer() {
+    if (timerFinishSaveInProgress) {
+      return;
+    }
+
+    const timer = normalizeTimer(currentData.timer);
+
+    if (!timer.running || getTimerRemaining(timer) > 0) {
+      return;
+    }
+
+    timerFinishSaveInProgress = true;
+
+    try {
+      const data = await getLatestData();
+      const latestTimer = normalizeTimer(data.timer);
+
+      if (!latestTimer.running || getTimerRemaining(latestTimer) > 0) {
+        return;
+      }
+
+      data.timer = {
+        ...latestTimer,
+        remainingSeconds: 0,
+        running: false,
+        startedAt: "",
+        endAt: "",
+        updatedAt: new Date().toISOString()
+      };
+
+      addHistoryEntry(data, {
+        type: "timer",
+        level: "timer",
+        category: "Timer",
+        text: `${latestTimer.label || "Bunny timer"} finished`,
+        coinChange: 0,
+        coinsAfter: data.coinTotal
+      });
+
+      await saveData(data);
+      await showPhoneNotification("Bunny timer finished", {
+        body: latestTimer.label || "The timer has finished.",
+        tag: "clara-bunny-timer"
+      });
+    } finally {
+      timerFinishSaveInProgress = false;
+    }
+  }
+
+  function handleTimerTick() {
+    updateTimerDisplay();
+
+    if (normalizeTimer(currentData.timer).running && getTimerRemaining(currentData.timer) <= 0) {
+      finishTimer().catch(console.error);
+    }
+  }
+
   function switchPage(page) {
-    if (childMode && !["home", "feelings", "rewards", "calendar"].includes(page)) {
+    if (childMode && !["home", "feelings", "rewards", "calendar", "timer"].includes(page)) {
       page = "home";
     }
 
@@ -1991,7 +2236,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelectorAll(".nav-button").forEach(button => {
-      const parentOnlyPage = !["home", "feelings", "rewards", "calendar"].includes(button.dataset.page);
+      const parentOnlyPage = !["home", "feelings", "rewards", "calendar", "timer"].includes(button.dataset.page);
       button.hidden = childMode && parentOnlyPage;
     });
 
@@ -2062,7 +2307,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (childMode) {
       const activePage = document.querySelector(".page.active");
-      if (activePage && !["page-home", "page-feelings", "page-rewards", "page-calendar"].includes(activePage.id)) {
+      if (activePage && !["page-home", "page-feelings", "page-rewards", "page-calendar", "page-timer"].includes(activePage.id)) {
         switchPage("home");
       }
     }
@@ -2081,6 +2326,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateRewardRequests();
     updateParentDashboard();
     updateCalendar();
+    updateTimerDisplay();
     updateParentNotes();
     updateRewardEditor();
     updateCategoryOptions();
@@ -2633,7 +2879,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      serviceWorkerRegistration = await navigator.serviceWorker.register("./sw.js?v=2");
+      if (!window.__claraControllerChangeListenerSet) {
+        window.__claraControllerChangeListenerSet = true;
+        let refreshing = false;
+
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (refreshing) {
+            return;
+          }
+
+          refreshing = true;
+          window.location.reload();
+        });
+      }
+
+      serviceWorkerRegistration = await navigator.serviceWorker.register(`./sw.js?v=${CLARA_APP_VERSION}`, {
+        updateViaCache: "none"
+      });
+
+      await serviceWorkerRegistration.update();
+
+      if (serviceWorkerRegistration.waiting) {
+        serviceWorkerRegistration.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
+
+      serviceWorkerRegistration.addEventListener("updatefound", () => {
+        const newWorker = serviceWorkerRegistration.installing;
+
+        if (!newWorker) {
+          return;
+        }
+
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            newWorker.postMessage({ type: "SKIP_WAITING" });
+          }
+        });
+      });
+
       await navigator.serviceWorker.ready;
       return serviceWorkerRegistration;
     } catch (error) {
@@ -2878,6 +3161,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (elements.themeSelect) elements.themeSelect.addEventListener("change", event => setTheme(event.target.value));
 
+    document.querySelectorAll("[data-timer-preset]").forEach(button => {
+      button.addEventListener("click", () => setTimerDuration(Number(button.dataset.timerPreset), button.textContent.trim()));
+    });
+
+    if (elements.timerStartButton) elements.timerStartButton.addEventListener("click", startTimer);
+    if (elements.timerPauseButton) elements.timerPauseButton.addEventListener("click", pauseTimer);
+    if (elements.timerResetButton) elements.timerResetButton.addEventListener("click", resetTimer);
+    if (elements.saveTimerSettingsButton) elements.saveTimerSettingsButton.addEventListener("click", saveTimerSettings);
+
     elements.deduct5Button.addEventListener("click", () => adjustCoins(-5));
     elements.deduct10Button.addEventListener("click", () => adjustCoins(-10));
     elements.deduct50Button.addEventListener("click", () => adjustCoins(-50));
@@ -2938,5 +3230,6 @@ document.addEventListener("DOMContentLoaded", () => {
   connectEvents();
   setupServiceWorker().finally(updateNotificationStatus);
   updateDisplay();
+  setInterval(handleTimerTick, 1000);
   initFirebase();
 });
