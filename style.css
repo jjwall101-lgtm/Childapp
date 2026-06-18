@@ -4197,3 +4197,90 @@ html[data-theme="bunny"] .clara-tool-card,
   color: #6a5160;
   font-size: 13px;
 }
+
+
+/* v13: Carrot Bank moved into Clara's main top square on Child Home. */
+.hero-carrot-bank {
+  display: none;
+}
+
+body.child-mode[data-active-page="home"] .hero-carrot-bank {
+  display: block;
+  margin: 16px auto 12px;
+  padding: 14px 12px 16px;
+  max-width: 470px;
+  border: 5px solid var(--outline);
+  border-radius: 28px;
+  box-shadow: 6px 6px 0 rgba(0,0,0,.95);
+  background: linear-gradient(180deg, #fffafc 0%, #f7f1f5 100%);
+}
+
+.hero-carrot-title {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 4px solid var(--outline);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.95);
+  background: linear-gradient(180deg, #f4bfd9, #e89fc3);
+  color: #7a4064;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.hero-coin-count {
+  margin: 12px 0 10px;
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1;
+  color: #6b5566;
+}
+
+.hero-coin-count small {
+  font-size: 20px;
+}
+
+.hero-progress-outer {
+  height: 26px;
+}
+
+.hero-journey-wrap {
+  margin-top: 12px;
+}
+
+.hero-journey-track {
+  height: 68px;
+}
+
+.hero-next-reward {
+  margin: 10px 0 0;
+  font-size: 14px;
+}
+
+/* The separate Carrot Bank card is no longer needed on Clara's Child Home, 
+   because it now lives inside the top square. Keep it available in Parent Mode. */
+body.child-mode[data-active-page="home"] #page-home .coin-card {
+  display: none !important;
+}
+
+/* Remove the old Who am I with card spacing if cached HTML still has it. */
+body.child-mode .who-today-tool {
+  display: none !important;
+}
+
+@media (max-width: 430px) {
+  body.child-mode[data-active-page="home"] .hero-carrot-bank {
+    padding: 12px 10px 14px;
+  }
+
+  .hero-coin-count {
+    font-size: 38px;
+  }
+
+  .hero-journey-track {
+    height: 62px;
+  }
+
+  .hero-next-reward {
+    font-size: 13px;
+  }
+}

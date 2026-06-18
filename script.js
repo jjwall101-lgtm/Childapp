@@ -199,6 +199,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     themeSelect: $("themeSelect"),
 
+    heroCoinTotalMain: $("heroCoinTotalMain"),
+    heroGoalDisplay: $("heroGoalDisplay"),
+    heroCoinProgress: $("heroCoinProgress"),
+    heroProgressCharacter: $("heroProgressCharacter"),
+    heroFinishGoal: $("heroFinishGoal"),
+    heroNextRewardText: $("heroNextRewardText"),
+
     coinTotalMain: $("coinTotalMain"),
     goalDisplay: $("goalDisplay"),
     finishGoal: $("finishGoal"),
@@ -3057,7 +3064,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateLevelDisplay();
     updateStreakDisplay();
     updateChildDashboard();
-    updateWhoTodayCard();
     updateNowNextTool();
     updateRoutineTool();
     updateCalmTool();
@@ -3104,11 +3110,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const total = currentData.coinTotal;
     const percent = Math.max(0, Math.min(100, (total / goal) * 100));
 
-    elements.coinTotalMain.textContent = total;
-    elements.goalDisplay.textContent = goal;
-    elements.finishGoal.textContent = goal;
-    elements.coinProgress.style.width = `${percent}%`;
-    elements.progressCharacter.style.left = `calc(${percent}% - 18px)`;
+    if (elements.coinTotalMain) {
+      elements.coinTotalMain.textContent = total;
+    }
+
+    if (elements.goalDisplay) {
+      elements.goalDisplay.textContent = goal;
+    }
+
+    if (elements.finishGoal) {
+      elements.finishGoal.textContent = goal;
+    }
+
+    if (elements.coinProgress) {
+      elements.coinProgress.style.width = `${percent}%`;
+    }
+
+    if (elements.progressCharacter) {
+      elements.progressCharacter.style.left = `calc(${percent}% - 18px)`;
+    }
+
+    if (elements.heroCoinTotalMain) {
+      elements.heroCoinTotalMain.textContent = total;
+    }
+
+    if (elements.heroGoalDisplay) {
+      elements.heroGoalDisplay.textContent = goal;
+    }
+
+    if (elements.heroFinishGoal) {
+      elements.heroFinishGoal.textContent = goal;
+    }
+
+    if (elements.heroCoinProgress) {
+      elements.heroCoinProgress.style.width = `${percent}%`;
+    }
+
+    if (elements.heroProgressCharacter) {
+      elements.heroProgressCharacter.style.left = `calc(${percent}% - 18px)`;
+    }
 
     if (elements.childFinishGoal) {
       elements.childFinishGoal.textContent = goal;
@@ -3118,18 +3158,33 @@ document.addEventListener("DOMContentLoaded", () => {
       elements.childProgressCharacter.style.left = `calc(${percent}% - 18px)`;
     }
 
-    elements.greenCoinValue.textContent = `+${currentData.settings.greenCoins} carrots`;
-    elements.redCoinValue.textContent = `-${currentData.settings.redCoins} carrots`;
+    if (elements.greenCoinValue) {
+      elements.greenCoinValue.textContent = `+${currentData.settings.greenCoins} carrots`;
+    }
+
+    if (elements.redCoinValue) {
+      elements.redCoinValue.textContent = `-${currentData.settings.redCoins} carrots`;
+    }
 
     const rewards = normalizeRewards(currentData.rewards).sort((a, b) => a.cost - b.cost);
     const nextReward = rewards.find(reward => reward.cost > total);
 
+    let nextRewardMessage = "";
+
     if (nextReward) {
-      elements.nextRewardText.textContent = `Next reward: ${nextReward.icon} ${nextReward.name} - ${nextReward.cost - total} carrots to go`;
+      nextRewardMessage = `Next reward: ${nextReward.icon} ${nextReward.name} - ${nextReward.cost - total} carrots to go`;
     } else if (rewards.length) {
-      elements.nextRewardText.textContent = "All rewards are affordable!";
+      nextRewardMessage = "All rewards are affordable!";
     } else {
-      elements.nextRewardText.textContent = "Add rewards in the Parent Page.";
+      nextRewardMessage = "Add rewards in the Parent Page.";
+    }
+
+    if (elements.nextRewardText) {
+      elements.nextRewardText.textContent = nextRewardMessage;
+    }
+
+    if (elements.heroNextRewardText) {
+      elements.heroNextRewardText.textContent = nextRewardMessage;
     }
   }
 

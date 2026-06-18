@@ -73,3 +73,11 @@ The calendar page title now says CLARA'S CALENDAR. Cache version bumped to clara
 - Added Who am I with today? home card using Clara's calendar.
 - Added child reward request status list.
 - Kept Clara pastel bunny theme, carrots, Firebase sync, and child Carrot Bank.
+
+
+## v13 Home layout update
+
+- Moved the full Carrot Bank into Clara's main top square on the Child Home screen.
+- Hid the separate Carrot Bank card on Child Home to avoid duplication.
+- Removed the "Who am I with today?" home card.
+- Parent Mode keeps the normal Carrot Bank controls.

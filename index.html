@@ -6,7 +6,7 @@
 
   <title>Clara</title>
 
-  <link rel="stylesheet" href="style.css?v=clara-tools-12" />
+  <link rel="stylesheet" href="style.css?v=clara-tools-13" />
   <link rel="manifest" href="manifest.json" />
 
   <link rel="icon" href="icon.png" />
@@ -32,6 +32,32 @@
         <h1>Clara</h1>
 
         <p class="mode-status-pill" id="modeStatusPill">Child Mode</p>
+
+        <section class="hero-carrot-bank child-mode-only" aria-label="Clara's carrot bank">
+          <div class="hero-carrot-title">CARROT BANK</div>
+
+          <div class="hero-coin-count">
+            <span id="heroCoinTotalMain">0</span>
+            <small>/ <span id="heroGoalDisplay">1000</span></small>
+          </div>
+
+          <div class="progress-outer hero-progress-outer" aria-label="Carrot progress to goal">
+            <div class="progress-inner" id="heroCoinProgress"></div>
+          </div>
+
+          <div class="journey-wrap hero-journey-wrap" aria-label="Bunny journey to goal carrots">
+            <div class="journey-track hero-journey-track">
+              <span class="journey-start">0</span>
+              <span class="journey-character" id="heroProgressCharacter">🐰</span>
+              <span class="finish-line">
+                <span class="finish-flag">🏁</span>
+                <span class="finish-text" id="heroFinishGoal">1000</span>
+              </span>
+            </div>
+          </div>
+
+          <p class="next-reward hero-next-reward" id="heroNextRewardText">Next reward loading...</p>
+        </section>
 
         <section class="hero-child-stats child-mode-only" aria-label="Clara's carrot bank and streak">
           <div class="hero-child-stat hero-child-carrots">
@@ -94,11 +120,6 @@
     </section>
 
     <section class="page active" id="page-home">
-
-      <section class="clara-tool-card who-today-tool child-mode-only">
-        <div class="section-title">WHO AM I WITH?</div>
-        <div class="who-today-display" id="whoTodayCard">Loading today's plan...</div>
-      </section>
 
       <section class="clara-tool-card now-next-tool">
         <div class="section-title">NOW / NEXT</div>
@@ -322,14 +343,6 @@
             <div class="panel-title">Recent Feelings</div>
             <div class="parent-feelings-list" id="parentFeelingsList">
               <p class="empty-notes">No feelings logged yet.</p>
-            </div>
-          </section>
-
-
-          <section class="parent-panel calm-parent-panel">
-            <div class="panel-title">Recent Calm Choices</div>
-            <div class="parent-calm-list" id="parentCalmList">
-              <p class="empty-notes">No calm choices yet.</p>
             </div>
           </section>
 
@@ -705,6 +718,6 @@
     <div class="jay-signature"></div>
   </main>
 
-  <script src="script.js?v=clara-tools-12" type="module"></script>
+  <script src="script.js?v=clara-tools-13" type="module"></script>
 </body>
 </html>
